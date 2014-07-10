@@ -3,6 +3,7 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
+using Raging.Toolbox.Helpers;
 
 namespace Raging.Toolbox.Extensions
 {
@@ -119,6 +120,8 @@ namespace Raging.Toolbox.Extensions
 
         public static T To<T>(this string source, CultureInfo ci)
         {
+            Check.ForNull(() => source);
+
             var type = typeof(T);
 
             if(type.IsPrimitive)

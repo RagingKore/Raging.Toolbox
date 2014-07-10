@@ -1,4 +1,5 @@
 using System.Collections.Generic;
+using Raging.Toolbox.Helpers;
 
 namespace Raging.Toolbox.Extensions
 {
@@ -17,6 +18,8 @@ namespace Raging.Toolbox.Extensions
         /// </returns>
         public static ICollection<T> AddRange<T>(this ICollection<T> source, IEnumerable<T> items)
         {
+            Check.ForNull(() => source);
+
             items.ForEach(source.Add);
 
             return source;
@@ -35,6 +38,8 @@ namespace Raging.Toolbox.Extensions
         /// </returns>
         public static ICollection<T> RemoveRange<T>(this ICollection<T> source, IEnumerable<T> items)
         {
+            Check.ForNull(() => source);
+            
             items.ForEach(item => source.Remove(item));
 
             return source;

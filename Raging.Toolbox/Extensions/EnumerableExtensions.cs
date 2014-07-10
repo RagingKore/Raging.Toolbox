@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
+using Raging.Toolbox.Helpers;
 
 namespace Raging.Toolbox.Extensions
 {
@@ -50,6 +51,9 @@ namespace Raging.Toolbox.Extensions
         /// <param name="action">   The action. </param>
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
+            Check.ForNull(() => source);
+            Check.ForNull(() => action);
+
             foreach(var item in source) action(item);
 
             return source;
@@ -87,8 +91,38 @@ namespace Raging.Toolbox.Extensions
         /// </returns>
         public static string Join(this IEnumerable<string> source, string separator = ",")
         {
+            Check.ForNull(() => source);
+            Check.ForNullOrEmpty(() => separator);
+
             return string.Join(separator, source);
         }
+
+        public static IEnumerable<T> Apply<T>(this IEnumerable<T> source, Action<T> action)
+        {
+            Check.ForNull(() => source);
+            Check.ForNull(() => action);
+
+            foreach (var item in source)
+            {
+                action(item);
+                yield return item;
+            }
+        }
+
+        public static IEnumerable<TSource> Apply<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action)
+        {
+            Check.ForNull(() => source);
+            Check.ForNull(() => action);
+
+            var i = 0;
+            foreach (var item in source)
+            {
+                action(item, i);
+                yield return item;
+                i += 1;
+            }
+        }
+
 
         /// <summary>
         /// An IEnumerable&lt;TSource&gt; extension method to order with direction.
@@ -108,6 +142,8 @@ namespace Raging.Toolbox.Extensions
             Func<TSource, TKey> keySelector,
             bool descending)
         {
+            Check.ForNull(() => source);
+
             return descending
                 ? source.OrderByDescending(keySelector)
                 : source.OrderBy(keySelector);
@@ -131,6 +167,8 @@ namespace Raging.Toolbox.Extensions
             Expression<Func<TSource, TKey>> keySelector,
             bool descending)
         {
+            Check.ForNull(() => source);
+
             return descending
                 ? source.OrderByDescending(keySelector)
                 : source.OrderBy(keySelector);

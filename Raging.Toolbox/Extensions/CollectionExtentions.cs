@@ -17,7 +17,7 @@ namespace Raging.Toolbox.Extensions
         /// </returns>
         public static ICollection<T> AddRange<T>(this ICollection<T> source, IEnumerable<T> items)
         {
-            foreach (var item in items) source.Add(item);
+            items.ForEach(source.Add);
 
             return source;
         }
@@ -35,7 +35,7 @@ namespace Raging.Toolbox.Extensions
         /// </returns>
         public static ICollection<T> RemoveRange<T>(this ICollection<T> source, IEnumerable<T> items)
         {
-            foreach (var item in items) source.Remove(item);
+            items.ForEach(item => source.Remove(item));
 
             return source;
         }

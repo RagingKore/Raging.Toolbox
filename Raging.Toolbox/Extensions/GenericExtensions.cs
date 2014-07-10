@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using System.ComponentModel;
 
 namespace Raging.Toolbox.Extensions
 {
@@ -42,37 +41,6 @@ namespace Raging.Toolbox.Extensions
         public static bool IsNotDefault<T>(this T source)
         {
             return !IsDefault(source);
-        }
-
-        /// <summary>
-        /// A T extension method that gets the value for the description attribute for the given object source
-        /// </summary>
-        ///
-        /// <typeparam name="T">Generic type parameter.</typeparam>
-        /// <param name="source">The source to act on.</param>
-        ///
-        /// <returns>
-        /// A string.
-        /// </returns>
-        public static string Description<T>(this T source)
-        {
-            var type = source.GetType();
-
-            DescriptionAttribute[] descriptions;
-
-            if (type.IsEnum)
-            {
-                descriptions = (DescriptionAttribute[])type
-                    .GetField(source.ToString())
-                    .GetCustomAttributes(typeof(DescriptionAttribute), false);
-            }
-            else
-            {
-                descriptions = (DescriptionAttribute[])type
-                    .GetCustomAttributes(typeof(DescriptionAttribute), false);
-            }
-
-            return descriptions.Length == 0 ? null : descriptions[0].Description;
         }
     }
 }

@@ -6,6 +6,8 @@ using System.Threading.Tasks;
 
 namespace Raging.Toolbox.Extensions
 {
+    // ReSharper disable PossibleMultipleEnumeration
+    // ReSharper disable once AssignNullToNotNullAttribute
     public static class EnumerableExtensions
     {
         /// <summary>
@@ -46,22 +48,11 @@ namespace Raging.Toolbox.Extensions
         /// <typeparam name="T">    Generic type parameter. </typeparam>
         /// <param name="source">   the source enumerable. </param>
         /// <param name="action">   The action. </param>
-        public static void ForEach<T>(this IEnumerable<T> source, Action<T> action)
+        public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
-            foreach (var item in source) action(item);
-        }
+            foreach(var item in source) action(item);
 
-        /// <summary>
-        /// An IEnumerable&lt;T&gt; extension method that applies an operation to all items in this
-        /// collection in parallel.
-        /// </summary>
-        ///
-        /// <typeparam name="T">    Generic type parameter. </typeparam>
-        /// <param name="source">   the source enumerable. </param>
-        /// <param name="action">   The action. </param>
-        public static void ParallelForEach<T>(this IEnumerable<T> source, Action<T> action)
-        {
-            Parallel.ForEach(source, action);
+            return source;
         }
 
         /// <summary>
@@ -73,9 +64,14 @@ namespace Raging.Toolbox.Extensions
         /// <param name="source">   the source enumerable. </param>
         /// <param name="action">   The action. </param>
         /// <param name="options">  Options for controlling the operation. </param>
-        public static void ParallelForEach<T>(this IEnumerable<T> source, Action<T> action, ParallelOptions options)
+        public static IEnumerable<T> ParallelForEach<T>(this IEnumerable<T> source, Action<T> action, ParallelOptions options = null)
         {
-            Parallel.ForEach(source, options, action);
+            if(options.IsNull())
+                Parallel.ForEach(source, action);
+            else
+                Parallel.ForEach(source, options, action);
+
+            return source;
         }
 
         /// <summary>
@@ -108,7 +104,9 @@ namespace Raging.Toolbox.Extensions
         /// An IOrderedEnumerable&lt;TSource&gt;
         /// </returns>
         public static IOrderedEnumerable<TSource> OrderBy<TSource, TKey>(
-            this IEnumerable<TSource> source, Func<TSource, TKey> keySelector, bool descending)
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            bool descending)
         {
             return descending
                 ? source.OrderByDescending(keySelector)
@@ -129,7 +127,9 @@ namespace Raging.Toolbox.Extensions
         /// An IOrderedEnumerable&lt;TSource&gt;
         /// </returns>
         public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(
-            this IQueryable<TSource> source, Expression<Func<TSource, TKey>> keySelector, bool descending)
+            this IQueryable<TSource> source,
+            Expression<Func<TSource, TKey>> keySelector,
+            bool descending)
         {
             return descending
                 ? source.OrderByDescending(keySelector)

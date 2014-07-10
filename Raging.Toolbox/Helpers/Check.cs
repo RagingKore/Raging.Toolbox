@@ -225,6 +225,25 @@ namespace Raging.Toolbox.Helpers
             }
         }
 
+        [DebuggerStepThrough]
+        public static void ForNegative(short parameter, string parameterName)
+        {
+            if (parameter < 0)
+                throw new ArgumentOutOfRangeException(parameterName, ErrorMessages.ArgumentCannotBeNegative.FormatWith(parameterName));
+        }
+
+        [DebuggerStepThrough]
+        public static void ForNegative(Expression<Func<short>> parameterExpression)
+        {
+            if (parameterExpression.Compile()() < 0)
+            {
+                var parameterName = parameterExpression.GetVariableName();
+
+                throw new ArgumentOutOfRangeException(parameterName, ErrorMessages.ArgumentCannotBeNegative.FormatWith(parameterName));
+            }
+        }
+
+
         #endregion
 
         #region . ForNegativeOrZero .
@@ -292,6 +311,24 @@ namespace Raging.Toolbox.Helpers
 
         [DebuggerStepThrough]
         public static void ForNegativeOrZero(Expression<Func<float>> parameterExpression)
+        {
+            if (parameterExpression.Compile()() <= 0)
+            {
+                var parameterName = parameterExpression.GetVariableName();
+
+                throw new ArgumentOutOfRangeException(parameterName, ErrorMessages.ArgumentCannotBeNegativeOrZero.FormatWith(parameterName));
+            }
+        }
+
+        [DebuggerStepThrough]
+        public static void ForNegativeOrZero(short parameter, string parameterName)
+        {
+            if (parameter <= 0)
+                throw new ArgumentOutOfRangeException(parameterName, ErrorMessages.ArgumentCannotBeNegative.FormatWith(parameterName));
+        }
+
+        [DebuggerStepThrough]
+        public static void ForNegativeOrZero(Expression<Func<short>> parameterExpression)
         {
             if (parameterExpression.Compile()() <= 0)
             {
@@ -377,6 +414,24 @@ namespace Raging.Toolbox.Helpers
             }
         }
 
+        [DebuggerStepThrough]
+        public static void ForPositive(short parameter, string parameterName)
+        {
+            if (parameter > 0)
+                throw new ArgumentOutOfRangeException(parameterName, ErrorMessages.ArgumentCannotBePositive.FormatWith(parameterName));
+        }
+
+        [DebuggerStepThrough]
+        public static void ForPositive(Expression<Func<short>> parameterExpression)
+        {
+            if (parameterExpression.Compile()() > 0)
+            {
+                var parameterName = parameterExpression.GetVariableName();
+
+                throw new ArgumentOutOfRangeException(parameterName, ErrorMessages.ArgumentCannotBePositive.FormatWith(parameterName));
+            }
+        }
+
         #endregion
 
         #region . ForPositiveOrZero .
@@ -446,6 +501,24 @@ namespace Raging.Toolbox.Helpers
         public static void ForPositiveOrZero(Expression<Func<float>> parameterExpression)
         {
             if (parameterExpression.Compile()() >= 0)
+            {
+                var parameterName = parameterExpression.GetVariableName();
+
+                throw new ArgumentOutOfRangeException(parameterName, ErrorMessages.ArgumentCannotBePositiveOrZero.FormatWith(parameterName));
+            }
+        }
+
+        [DebuggerStepThrough]
+        public static void ForPositiveOrZero(short parameter, string parameterName)
+        {
+            if (parameter >= 0)
+                throw new ArgumentOutOfRangeException(parameterName, ErrorMessages.ArgumentCannotBePositive.FormatWith(parameterName));
+        }
+
+        [DebuggerStepThrough]
+        public static void ForPositiveOrZero(Expression<Func<short>> parameterExpression)
+        {
+            if (parameterExpression.Compile()() <= 0)
             {
                 var parameterName = parameterExpression.GetVariableName();
 

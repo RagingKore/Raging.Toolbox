@@ -7,7 +7,7 @@ namespace Raging.Toolbox.Extensions
     {
         public static string GetVariableName<T>(this Expression<Func<T>> source)
         {
-            return ( (MemberExpression) source.Body ).Member.Name;
+            return ((MemberExpression)source.Body).Member.Name;
         }
     }
 }

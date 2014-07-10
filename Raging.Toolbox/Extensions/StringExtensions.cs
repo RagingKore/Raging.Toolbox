@@ -9,16 +9,6 @@ namespace Raging.Toolbox.Extensions
     // ReSharper disable InconsistentNaming
     public static class StringExtensions
     {
-        public static bool IsBlank(this string source)
-        {
-            return string.IsNullOrWhiteSpace(source);
-        }
-
-        public static bool IsNotBlank(this string source)
-        {
-            return !string.IsNullOrWhiteSpace(source);
-        }
-
         public static bool IsNullOrWhiteSpace(this string source)
         {
             return string.IsNullOrWhiteSpace(source);
@@ -106,7 +96,7 @@ namespace Raging.Toolbox.Extensions
 
         public static bool Contains(this string source, string compare, StringComparison compareMode = StringComparison.Ordinal)
         {
-            if (string.IsNullOrEmpty(source))
+            if(string.IsNullOrEmpty(source))
                 return false;
 
             return source.IndexOf(compare, compareMode) >= 0;
@@ -131,10 +121,10 @@ namespace Raging.Toolbox.Extensions
         {
             var type = typeof(T);
 
-            if (type.IsPrimitive)
+            if(type.IsPrimitive)
                 return (T)Convert.ChangeType(source, type, ci);
 
-            if (type.IsEnum)
+            if(type.IsEnum)
                 return (T)Enum.Parse(type, source);
 
             return (T)TypeDescriptor
@@ -154,7 +144,7 @@ namespace Raging.Toolbox.Extensions
                 convertedValue = source.To<T>();
                 return true;
             }
-            catch (Exception)
+            catch(Exception)
             {
                 convertedValue = default(T);
                 return false;
@@ -172,7 +162,6 @@ namespace Raging.Toolbox.Extensions
         }
 
         public static byte[] GetUTF8Bytes(this string source)
-       
         {
             return Encoding.UTF8.GetBytes(source);
         }

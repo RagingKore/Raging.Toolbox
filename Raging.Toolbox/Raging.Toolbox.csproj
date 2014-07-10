@@ -41,6 +41,7 @@
   <ItemGroup>
     <Compile Include="Extensions\AppDomainExtensions.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />
+    <Compile Include="Extensions\EnumExtensions.cs" />
     <Compile Include="Extensions\ExpressionExtensions.cs" />
     <Compile Include="Extensions\GenericExtensions.cs" />
     <Compile Include="Helpers\Check.cs" />

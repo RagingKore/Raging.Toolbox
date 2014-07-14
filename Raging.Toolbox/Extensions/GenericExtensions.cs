@@ -1,4 +1,7 @@
+using System;
 using System.Collections.Generic;
+using System.Linq;
+using System.Linq.Expressions;
 
 namespace Raging.Toolbox.Extensions
 {
@@ -41,6 +44,16 @@ namespace Raging.Toolbox.Extensions
         public static bool IsNotDefault<T>(this T source)
         {
             return !IsDefault(source);
+        }
+
+        public static bool EnsureThat<T>(this T source, params Expression<Func<T, bool>>[] actions)
+        {
+            return actions.All(expression => source.EnsureThat(expression));
+        }
+
+        public static bool EnsureThat<T>(this T source, Expression<Func<T, bool>> action)
+        {
+            return action.Compile()(source);
         }
     }
 }

@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
 using System.Threading.Tasks;
-using Raging.Toolbox.Helpers;
 
 namespace Raging.Toolbox.Extensions
 {
@@ -24,6 +23,11 @@ namespace Raging.Toolbox.Extensions
         public static bool IsNullOrEmpty<T>(this IEnumerable<T> source)
         {
             return source == null || !source.Any();
+        }
+
+        public static bool IsNotNullOrEmpty<T>(this IEnumerable<T> source)
+        {
+            return !source.IsNullOrEmpty();
         }
 
         /// <summary>

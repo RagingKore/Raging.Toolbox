@@ -1,5 +1,3 @@
-using Raging.Toolbox.Helpers;
-
 namespace Raging.Toolbox.Extensions
 {
     public static class ArrayExtensions
@@ -9,15 +7,15 @@ namespace Raging.Toolbox.Extensions
         /// a single separated string.
         /// </summary>
         ///
-        /// <param name="source">        The value to act on. </param>
-        /// <param name="separator">    (Optional) the separator. </param>
+        /// <param name="source"> The value to act on. </param>
+        /// <param name="separator">(Optional) the separator. </param>
         ///
         /// <returns>
         /// A string.
         /// </returns>
         public static string Join(this string[] source, string separator = ",")
         {
-            Check.ForNull(() => source);
+            Check.ForNullOrEmpty(() => source);
             Check.ForNullOrEmpty(() => separator);
 
             return string.Join(separator, source);

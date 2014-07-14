@@ -3,7 +3,6 @@ using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
-using Raging.Toolbox.Helpers;
 
 namespace Raging.Toolbox.Extensions
 {
@@ -144,7 +143,7 @@ namespace Raging.Toolbox.Extensions
         {
             try
             {
-                convertedValue = source.To<T>();
+                convertedValue = source.To<T>(ci);
                 return true;
             }
             catch(Exception)

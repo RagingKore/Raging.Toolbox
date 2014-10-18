@@ -112,47 +112,6 @@ namespace Raging.Toolbox.Extensions
             return string.Format(ci, source, args);
         }
 
-        public static T To<T>(this string source)
-        {
-            return source.To<T>(CultureInfo.InvariantCulture);
-        }
-
-        public static T To<T>(this string source, CultureInfo ci)
-        {
-            Check.ForNull(() => source);
-
-            var type = typeof(T);
-
-            if(type.IsPrimitive)
-                return (T)Convert.ChangeType(source, type, ci);
-
-            if(type.IsEnum)
-                return (T)Enum.Parse(type, source);
-
-            return (T)TypeDescriptor
-                .GetConverter(type)
-                .ConvertFrom(source);
-        }
-
-        public static bool TryTo<T>(this string source, out T convertedValue)
-        {
-            return source.TryTo(CultureInfo.InvariantCulture, out convertedValue);
-        }
-
-        public static bool TryTo<T>(this string source, CultureInfo ci, out T convertedValue)
-        {
-            try
-            {
-                convertedValue = source.To<T>(ci);
-                return true;
-            }
-            catch(Exception)
-            {
-                convertedValue = default(T);
-                return false;
-            }
-        }
-
         public static byte[] GetBytes(this string source, Encoding encoding)
         {
             return encoding.GetBytes(source);

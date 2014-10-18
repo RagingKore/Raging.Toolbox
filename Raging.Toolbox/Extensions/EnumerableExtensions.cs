@@ -55,8 +55,8 @@ namespace Raging.Toolbox.Extensions
         /// <param name="action">   The action. </param>
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
-            Check.ForNull(() => source);
-            Check.ForNull(() => action);
+            Guard.ForNull(() => source);
+            Guard.ForNull(() => action);
 
             foreach(var item in source) action(item);
 
@@ -95,16 +95,16 @@ namespace Raging.Toolbox.Extensions
         /// </returns>
         public static string Join(this IEnumerable<string> source, string separator = ",")
         {
-            Check.ForNull(() => source);
-            Check.ForNullOrEmpty(() => separator);
+            Guard.ForNull(() => source);
+            Guard.ForNullOrEmpty(() => separator);
 
             return string.Join(separator, source);
         }
 
         public static IEnumerable<T> Apply<T>(this IEnumerable<T> source, Action<T> action)
         {
-            Check.ForNull(() => source);
-            Check.ForNull(() => action);
+            Guard.ForNull(() => source);
+            Guard.ForNull(() => action);
 
             foreach (var item in source)
             {
@@ -115,8 +115,8 @@ namespace Raging.Toolbox.Extensions
 
         public static IEnumerable<TSource> Apply<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action)
         {
-            Check.ForNull(() => source);
-            Check.ForNull(() => action);
+            Guard.ForNull(() => source);
+            Guard.ForNull(() => action);
 
             var i = 0;
             foreach (var item in source)
@@ -126,7 +126,6 @@ namespace Raging.Toolbox.Extensions
                 i += 1;
             }
         }
-
 
         /// <summary>
         /// An IEnumerable&lt;TSource&gt; extension method to order with direction.
@@ -146,7 +145,7 @@ namespace Raging.Toolbox.Extensions
             Func<TSource, TKey> keySelector,
             bool descending)
         {
-            Check.ForNull(() => source);
+            Guard.ForNull(() => source);
 
             return descending
                 ? source.OrderByDescending(keySelector)
@@ -171,7 +170,7 @@ namespace Raging.Toolbox.Extensions
             Expression<Func<TSource, TKey>> keySelector,
             bool descending)
         {
-            Check.ForNull(() => source);
+            Guard.ForNull(() => source);
 
             return descending
                 ? source.OrderByDescending(keySelector)

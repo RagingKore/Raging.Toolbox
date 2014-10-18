@@ -4,11 +4,11 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{44FA9EAA-17AF-4F1D-9282-A5DE70EE39B7}</ProjectGuid>
+    <ProjectGuid>{1304CF90-4A02-4085-BE61-87CFB4D98DC8}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Raging.Toolbox.Tests</RootNamespace>
-    <AssemblyName>Raging.Toolbox.Tests</AssemblyName>
+    <RootNamespace>Raging.Toolbox.Testing.Moq</RootNamespace>
+    <AssemblyName>Raging.Toolbox.Testing.Moq</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
     <TargetFrameworkProfile />
@@ -31,38 +31,25 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
-    <Reference Include="FluentAssertions, Version=3.2.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.dll</HintPath>
-    </Reference>
-    <Reference Include="FluentAssertions.Core, Version=3.2.1.0, Culture=neutral, PublicKeyToken=33f2691a05b67b6a, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
-      <HintPath>..\packages\FluentAssertions.3.2.1\lib\net45\FluentAssertions.Core.dll</HintPath>
-    </Reference>
     <Reference Include="Moq">
       <HintPath>..\packages\Moq.4.2.1409.1722\lib\net40\Moq.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.core.interfaces, Version=2.6.2.12296, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="nunit.core.interfaces">
       <HintPath>..\packages\AutoFixture.NUnit2.3.20.4\lib\net40\nunit.core.interfaces.dll</HintPath>
     </Reference>
-    <Reference Include="nunit.framework, Version=2.6.3.13283, Culture=neutral, PublicKeyToken=96d09a1eb7f44a77, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="nunit.framework">
       <HintPath>..\packages\NUnit.2.6.3\lib\nunit.framework.dll</HintPath>
     </Reference>
-    <Reference Include="Ploeh.AutoFixture, Version=3.20.4.0, Culture=neutral, PublicKeyToken=b24654c590009d4f, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ploeh.AutoFixture">
       <HintPath>..\packages\AutoFixture.3.20.4\lib\net40\Ploeh.AutoFixture.dll</HintPath>
     </Reference>
     <Reference Include="Ploeh.AutoFixture.AutoMoq">
       <HintPath>..\packages\AutoFixture.AutoMoq.3.20.4\lib\net40\Ploeh.AutoFixture.AutoMoq.dll</HintPath>
     </Reference>
-    <Reference Include="Ploeh.AutoFixture.NUnit2, Version=3.20.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ploeh.AutoFixture.NUnit2">
       <HintPath>..\packages\AutoFixture.NUnit2.3.20.4\lib\net40\Ploeh.AutoFixture.NUnit2.dll</HintPath>
     </Reference>
-    <Reference Include="Ploeh.AutoFixture.NUnit2.Addins, Version=3.20.4.0, Culture=neutral, processorArchitecture=MSIL">
-      <SpecificVersion>False</SpecificVersion>
+    <Reference Include="Ploeh.AutoFixture.NUnit2.Addins">
       <HintPath>..\packages\AutoFixture.NUnit2.3.20.4\lib\net40\Ploeh.AutoFixture.NUnit2.Addins.dll</HintPath>
     </Reference>
     <Reference Include="System" />
@@ -74,29 +61,21 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="Extensions\SerializationExtensionsTests.cs" />
-    <Compile Include="GuardTests.cs" />
-    <Compile Include="Extensions\ExpressionExtensionsTests.cs" />
-    <Compile Include="Extensions\EnumExtensionsTests.cs" />
-    <Compile Include="Extensions\StringExtensionsTests.cs" />
+    <Compile Include="Auto.cs" />
+    <Compile Include="AutoMoqDataAttribute.cs" />
     <Compile Include="LocalAddin.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <ProjectReference Include="..\Raging.Toolbox\Raging.Toolbox.csproj">
+      <Project>{03ca1f8f-27c0-4477-ba81-8ec6b0b447e3}</Project>
+      <Name>Raging.Toolbox</Name>
+    </ProjectReference>
   </ItemGroup>
   <ItemGroup>
     <None Include="App.config" />
     <None Include="packages.config" />
   </ItemGroup>
-  <ItemGroup>
-    <ProjectReference Include="..\Raging.Toolbox.Testing.Moq\Raging.Toolbox.Testing.Moq.csproj">
-      <Project>{1304CF90-4A02-4085-BE61-87CFB4D98DC8}</Project>
-      <Name>Raging.Toolbox.Testing.Moq</Name>
-    </ProjectReference>
-    <ProjectReference Include="..\Raging.Toolbox\Raging.Toolbox.csproj">
-      <Project>{03CA1F8F-27C0-4477-BA81-8EC6B0B447E3}</Project>
-      <Name>Raging.Toolbox</Name>
-    </ProjectReference>
-  </ItemGroup>
-  <ItemGroup />
   <Import Project="$(MSBuildToolsPath)\Microsoft.CSharp.targets" />
   <!-- To modify your build process, add your task inside one of the targets below and uncomment it. 
        Other similar extension points exist, see Microsoft.Common.targets.

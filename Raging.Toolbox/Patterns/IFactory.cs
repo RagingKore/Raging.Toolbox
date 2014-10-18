@@ -1,95 +1,37 @@
 ﻿namespace Raging.Toolbox.Patterns
 {
-    /// <summary>
-    /// Interface for creating a factory.
-    /// </summary>
-    ///
-    /// <typeparam name="T">Generic type parameter.</typeparam>
-    public interface IFactory<T> where T : class
+    public interface IFactory<out T> where T : class
     {
         T Create();
     }
 
-    /// <summary>
-    /// Interface for creating a factory.
-    /// </summary>
-    ///
-    /// <typeparam name="T">Generic type parameter.</typeparam>
-    /// <typeparam name="TArgs">Type of the arguments.</typeparam>
-    public interface IFactory<T,TArgs> where T : class
+    public interface IFactory<out T, in TArgument> where T : class
     {
-        T Create(TArgs args);
-        T Create(params TArgs[] args);
+        T Create(TArgument args);
     }
 
-    /// <summary>
-    /// Interface for creating a factory.
-    /// </summary>
-    ///
-    /// <typeparam name="T">Generic type parameter.</typeparam>
-    /// <typeparam name="TArgs1">Type of the arguments 1.</typeparam>
-    /// <typeparam name="TArgs2">Type of the arguments 2.</typeparam>
-    public interface IFactory<T, TArgs1, TArgs2> where T : class
+    public interface IFactory<out T, in TArgument1, in TArgument2> where T : class
     {
-        T Create(TArgs1 args1, TArgs2 args2);
+        T Create(TArgument1 argument1, TArgument2 argument2);
     }
 
-    /// <summary>
-    /// Interface for creating a factory.
-    /// </summary>
-    ///
-    /// <typeparam name="T">Generic type parameter.</typeparam>
-    /// <typeparam name="TArgs1">Type of the arguments 1.</typeparam>
-    /// <typeparam name="TArgs2">Type of the arguments 2.</typeparam>
-    /// <typeparam name="TArgs3">Type of the arguments 3.</typeparam>
-    public interface IFactory<T, TArgs1, TArgs2, TArgs3> where T : class
+    public interface IFactory<out T, in TArgument1, in TArgument2, in TArgument3> where T : class
     {
-        T Create(TArgs1 args1, TArgs2 args2, TArgs3 args3);
+        T Create(TArgument1 argument1, TArgument2 argument2, TArgument3 argument3);
     }
 
-    /// <summary>
-    /// Interface for creating a factory.
-    /// </summary>
-    ///
-    /// <typeparam name="T">Generic type parameter.</typeparam>
-    /// <typeparam name="TArgs1">Type of the arguments 1.</typeparam>
-    /// <typeparam name="TArgs2">Type of the arguments 2.</typeparam>
-    /// <typeparam name="TArgs3">Type of the arguments 3.</typeparam>
-    /// <typeparam name="TArgs4">Type of the arguments 4.</typeparam>
-    public interface IFactory<T, TArgs1, TArgs2, TArgs3, TArgs4> where T : class
+    public interface IFactory<out T, in TArgument1, in TArgument2, in TArgument3, in TArgument4> where T : class
     {
-        T Create(TArgs1 args1, TArgs2 args2, TArgs3 args3, TArgs4 args4);
+        T Create(TArgument1 argument1, TArgument2 argument2, TArgument3 argument3, TArgument4 argument4);
     }
 
-    /// <summary>
-    /// Interface for creating a factory.
-    /// </summary>
-    ///
-    /// <typeparam name="T">        Generic type parameter. </typeparam>
-    /// <typeparam name="TArgs1">   Type of the arguments 1. </typeparam>
-    /// <typeparam name="TArgs2">   Type of the arguments 2. </typeparam>
-    /// <typeparam name="TArgs3">   Type of the arguments 3. </typeparam>
-    /// <typeparam name="TArgs4">   Type of the arguments 4. </typeparam>
-    /// <typeparam name="TArgs5">   Type of the arguments 5. </typeparam>
-    public interface IFactory<T, TArgs1, TArgs2, TArgs3, TArgs4, TArgs5> where T : class
+    public interface IFactory<out T, in TArgument1, in TArgument2, in TArgument3, in TArgument4, in TArgument5> where T : class
     {
-        T Create(TArgs1 args1, TArgs2 args2, TArgs3 args3, TArgs4 args4, TArgs5 args5);
+        T Create(TArgument1 argument1, TArgument2 argument2, TArgument3 argument3, TArgument4 argument4, TArgument5 argument5);
     }
 
-    /// <summary>
-    /// Interface for creating a factory.
-    /// </summary>
-    ///
-    /// <typeparam name="T">        Generic type parameter. </typeparam>
-    /// <typeparam name="TArgs1">   Type of the arguments 1. </typeparam>
-    /// <typeparam name="TArgs2">   Type of the arguments 2. </typeparam>
-    /// <typeparam name="TArgs3">   Type of the arguments 3. </typeparam>
-    /// <typeparam name="TArgs4">   Type of the arguments 4. </typeparam>
-    /// <typeparam name="TArgs5">   Type of the arguments 5. </typeparam>
-    /// <typeparam name="TArgs6">   Type of the arguments 6. </typeparam>
-    public interface IFactory<T, TArgs1, TArgs2, TArgs3, TArgs4, TArgs5, TArgs6> where T : class
+    public interface IFactory<out T, in TArgument1, in TArgument2, in TArgument3, in TArgument4, in TArgument5, in TArgument6> where T : class
     {
-        T Create(TArgs1 args1, TArgs2 args2, TArgs3 args3, TArgs4 args4, TArgs5 args5, TArgs6 args6);
+        T Create(TArgument1 argument1, TArgument2 argument2, TArgument3 argument3, TArgument4 argument4, TArgument5 argument5, TArgument6 argument6);
     }
-
 }

@@ -1,20 +1,36 @@
 using System;
-using Raging.Toolbox.Extensions;
+using System.Text.RegularExpressions;
 
 namespace Raging.Toolbox.Configuration
 {
     public static class ConfigurationManager
     {
-        public static T GetSection<T>(string name)
+        private const string ConfigurationNameByConventionPattern = @"I([a-z0-9\-]+)Config";
+
+        public static T GetSection<T>(string name) 
         {
-            Check.ForNullOrWhiteSpace(() => name);
+            Guard.ForNullOrWhiteSpace(() => name);
 
-            var section = System.Configuration.ConfigurationManager.GetSection(name);
+            return (T)System.Configuration.ConfigurationManager.GetSection(name);
+        }
 
-            if(section.IsNull())
-                throw new Exception();
+        public static T GetSection<T>() 
+        {
+            var type = typeof(T);
 
-            return (T) section;
+            if (!type.IsInterface)
+                throw new ArgumentException();
+            
+            var match = Regex.Match(
+                type.Name, 
+                ConfigurationNameByConventionPattern, 
+                RegexOptions.IgnoreCase);
+
+            var nameByConvention = match.Success
+                ? match.Groups[1].Value
+                : null;
+
+            return GetSection<T>(nameByConvention);
         }
     }
 }

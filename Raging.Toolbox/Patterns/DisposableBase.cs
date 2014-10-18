@@ -4,54 +4,52 @@ using System.Diagnostics;
 namespace Raging.Toolbox.Patterns
 {
     /// <summary>
-    /// A disposable base class.
+    ///     A disposable base class.
     /// </summary>
-    ///
     /// <seealso cref="T:System.IDisposable"/>
     public abstract class DisposableBase : IDisposable
     {
-        private bool _disposed;
+        private bool disposed;
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged
-        /// resources.
-        /// </summary>
-        [DebuggerStepThrough]
-        public void Dispose()
-        {
-            Dispose(false);
-        }
-
-        /// <summary>
-        /// Finalizes an instance of the DisposableBase class.
+        ///     Finalizes an instance of the DisposableBase class.
         /// </summary>
         [DebuggerStepThrough]
         ~DisposableBase()
         {
-            Dispose(true);
+            this.Dispose(true);
         }
 
         /// <summary>
-        /// Dispose resources.
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged
+        ///     resources.
         /// </summary>
-        protected virtual void DisposeResources() {}
+        [DebuggerStepThrough]
+        public void Dispose()
+        {
+            this.Dispose(false);
+        }
 
         /// <summary>
-        /// Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged
-        /// resources.
+        ///     Dispose resources.
         /// </summary>
-        ///
+        protected virtual void DisposeResources() { }
+
+        /// <summary>
+        ///     Performs application-defined tasks associated with freeing, releasing, or resetting unmanaged
+        ///     resources.
+        /// </summary>
         /// <param name="isFinalizing">true if this DisposableBase is finalizing.</param>
         [DebuggerStepThrough]
         private void Dispose(bool isFinalizing)
         {
-            if (_disposed) return;
+            if (this.disposed) return;
 
-            DisposeResources();
+            this.DisposeResources();
 
             if(!isFinalizing) GC.SuppressFinalize(this);
 
-            _disposed = true;
+            this.disposed = true;
         }
     }
 }

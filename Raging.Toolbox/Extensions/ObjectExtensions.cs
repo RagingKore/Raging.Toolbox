@@ -28,7 +28,7 @@ namespace Raging.Toolbox.Extensions
 
         public static T To<T>(this object source, CultureInfo ci)
         {
-            Guard.ForNull(() => source);
+            Guard.Null(() => source);
 
             var type = typeof(T);
 

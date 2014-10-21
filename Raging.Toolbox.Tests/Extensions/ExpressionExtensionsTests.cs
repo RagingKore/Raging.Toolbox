@@ -17,7 +17,7 @@ namespace Raging.Toolbox.Tests.Extensions
             Expression<Func<object>> expression = () => myObjectVariable;
 
             // act
-            var result = expression.GetVariableName();
+            var result = expression.GetParameterName();
 
             // assert
             result.Should().Be("myObjectVariable");

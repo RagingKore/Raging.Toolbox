@@ -1,5 +1,4 @@
 ﻿using System.Threading.Tasks;
-using Raging.Toolbox.Patterns;
 using Rebus;
 
 namespace Raging.Toolbox.Messaging.Rebus

@@ -1,5 +1,4 @@
 ﻿using System;
-using System.ComponentModel;
 using System.Globalization;
 using System.Linq;
 using System.Text;
@@ -31,12 +30,12 @@ namespace Raging.Toolbox.Extensions
 
         public static bool Compare(this string source, string compare, CultureInfo ci, CompareOptions options = CompareOptions.OrdinalIgnoreCase)
         {
-            return String.Compare(source, compare, ci, options) == 0;
+            return string.Compare(source, compare, ci, options) == 0;
         }
 
         public static bool Like(this string source, string compare, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
         {
-            return String.Compare(source, compare, comparison) == 0;
+            return string.Compare(source, compare, comparison) == 0;
         }
 
         public static bool NotLike(this string source, string compare, StringComparison comparison = StringComparison.OrdinalIgnoreCase)
@@ -153,14 +152,12 @@ namespace Raging.Toolbox.Extensions
         }
 
         /// <summary>
-        /// A string extension method that converts the source to a base 64 string, using 
-        /// utf8 encoding by default.
+        ///     A string extension method that converts the source to a base 64 string, using 
+        ///     utf8 encoding by default.
         /// </summary>
-        ///
         /// <param name="source">The source to act on.</param>
-        ///
         /// <returns>
-        /// source as a string.
+        ///     source as a string.
         /// </returns>
         public static string ToBase64(this string source)
         {
@@ -171,12 +168,10 @@ namespace Raging.Toolbox.Extensions
         /// A string extension method that converts the source to a base 64 string, using 
         /// the provided encoding.
         /// </summary>
-        ///
-        /// <param name="source">   The source to act on. </param>
-        /// <param name="encoding"> The encoding. </param>
-        ///
+        /// <param name="source">The source to act on.</param>
+        /// <param name="encoding">The encoding.</param>
         /// <returns>
-        /// The given data converted to a string.
+        ///     The given data converted to a string.
         /// </returns>
         public static string ToBase64(this string source, Encoding encoding)
         {
@@ -184,14 +179,12 @@ namespace Raging.Toolbox.Extensions
         }
 
         /// <summary>
-        /// A string extension method that converts a source from base 64, using 
-        /// utf8 encoding by default.
+        ///     A string extension method that converts a source from base 64, using 
+        ///     utf8 encoding by default.
         /// </summary>
-        ///
         /// <param name="source">The source to act on.</param>
-        ///
         /// <returns>
-        /// A string.
+        ///     A string.
         /// </returns>
         public static string FromBase64(this string source)
         {
@@ -199,15 +192,13 @@ namespace Raging.Toolbox.Extensions
         }
 
         /// <summary>
-        /// A string extension method that converts a source from base 64, using
-        /// the provided encoding.
+        ///     A string extension method that converts a source from base 64, using
+        ///     the provided encoding.
         /// </summary>
-        ///
         /// <param name="source">   The source to act on. </param>
         /// <param name="encoding"> The encoding. </param>
-        ///
         /// <returns>
-        /// A string.
+        ///     A string.
         /// </returns>
         public static string FromBase64(this string source, Encoding encoding)
         {

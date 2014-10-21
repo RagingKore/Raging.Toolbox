@@ -1,4 +1,4 @@
-﻿namespace Raging.Toolbox.Patterns
+﻿namespace Raging.Toolbox
 {
     public interface IFactory<out T> where T : class
     {

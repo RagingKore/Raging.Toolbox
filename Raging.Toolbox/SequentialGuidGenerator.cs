@@ -1,39 +1,78 @@
 ﻿using System;
+using System.Security.Cryptography;
 
 namespace Raging.Toolbox
 {
-    /// <summary>A sequential unique identifier generator.</summary>
-    public static class SequentialGuid
+    /// <summary>
+    ///     Values that represent how the guid will be generated.
+    /// </summary>
+    public enum SequentialGuidType
     {
         /// <summary>
-        /// Generates a new sequential <see cref="Guid"/> using the comb algorithm.
+        ///     For MySQL and PostgreSQL. Should be used with ToString().
         /// </summary>
-        /// <returns>A sequential unique identifier.</returns>
-        public static Guid New()
+        /// <remarks>MySQL [char(36)], PostgreSQL [uuid]</remarks>
+        SequentialAsString,
+
+        /// <summary>
+        ///     For Oracle. Should be used with ToByteArray().
+        /// </summary>
+        /// <remarks>Oracle [raw(16)]</remarks>
+        SequentialAsBinary,
+
+        /// <summary>
+        ///     For Microsoft SQL Server.
+        /// </summary>
+        /// <remarks>Microsoft SQL Server [uniqueidentifier]</remarks>
+        SequentialAtEnd
+    }
+
+    /// <summary>
+    ///     A sequential unique identifier generator. 
+    ///     Source: http://www.codeproject.com/Articles/388157/GUIDs-as-fast-primary-keys-under-multiple-database
+    /// </summary>
+    public static class SequentialGuid
+    {
+        private static readonly RNGCryptoServiceProvider Rng = new RNGCryptoServiceProvider();
+
+        public static Guid New(SequentialGuidType guidType = SequentialGuidType.SequentialAtEnd)
         {
-            var guidArray = Guid.NewGuid().ToByteArray();
+            var randomBytes = new byte[10];
 
-            var baseDate = new DateTime(1900, 1, 1);
-            var now = DateTime.Now;
+            Rng.GetBytes(randomBytes);
 
-            // Get the days and milliseconds which will be used to build the byte string 
-            var days = new TimeSpan(now.Ticks - baseDate.Ticks);
-            var msecs = now.TimeOfDay;
+            var timestamp = DateTime.UtcNow.Ticks / 10000L;
+            var timestampBytes = BitConverter.GetBytes(timestamp);
 
-            // Convert to a byte array 
-            // Note that SQL Server is accurate to 1/300th of a millisecond so we divide by 3.333333 
-            var daysArray = BitConverter.GetBytes(days.Days);
-            var msecsArray = BitConverter.GetBytes((long)(msecs.TotalMilliseconds / 3.333333));
+            if(BitConverter.IsLittleEndian)
+                Array.Reverse(timestampBytes);
 
-            // Reverse the bytes to match SQL Servers ordering 
-            Array.Reverse(daysArray);
-            Array.Reverse(msecsArray);
+            var guidBytes = new byte[16];
 
-            // Copy the bytes into the guid 
-            Array.Copy(daysArray, daysArray.Length - 2, guidArray, guidArray.Length - 6, 2);
-            Array.Copy(msecsArray, msecsArray.Length - 4, guidArray, guidArray.Length - 4, 4);
+            switch(guidType)
+            {
+                case SequentialGuidType.SequentialAsString:
+                case SequentialGuidType.SequentialAsBinary:
+                    Buffer.BlockCopy(timestampBytes, 2, guidBytes, 0, 6);
+                    Buffer.BlockCopy(randomBytes, 0, guidBytes, 6, 10);
 
-            return new Guid(guidArray);
+                    // If formatting as a string, we have to reverse the order
+                    // of the Data1 and Data2 blocks on little-endian systems.
+                    if(guidType == SequentialGuidType.SequentialAsString && BitConverter.IsLittleEndian)
+                    {
+                        Array.Reverse(guidBytes, 0, 4);
+                        Array.Reverse(guidBytes, 4, 2);
+                    }
+
+                    break;
+
+                case SequentialGuidType.SequentialAtEnd:
+                    Buffer.BlockCopy(randomBytes, 0, guidBytes, 0, 10);
+                    Buffer.BlockCopy(timestampBytes, 2, guidBytes, 10, 6);
+                    break;
+            }
+
+            return new Guid(guidBytes);
         }
     }
 }

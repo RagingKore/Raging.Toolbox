@@ -4,8 +4,8 @@ namespace Raging.Toolbox.Testing.Moq
 {
     public class AutoMoqDataAttribute : AutoDataAttribute
     {
-        public AutoMoqDataAttribute()
-            : base(Auto.Fixture)
+        public AutoMoqDataAttribute(bool useCurrentFixture = true)
+            : base(useCurrentFixture ? Auto.Fixture : Auto.CreateDefaultFixture())
         {
         }
     }

@@ -1,7 +1,7 @@
 ﻿using System;
 using System.Diagnostics;
 
-namespace Raging.Toolbox.Patterns
+namespace Raging.Toolbox
 {
     /// <summary>
     ///     A disposable base class.

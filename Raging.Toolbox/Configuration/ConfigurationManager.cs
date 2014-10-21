@@ -9,7 +9,7 @@ namespace Raging.Toolbox.Configuration
 
         public static T GetSection<T>(string name) 
         {
-            Guard.ForNullOrWhiteSpace(() => name);
+            Guard.NullOrWhiteSpace(() => name);
 
             return (T)System.Configuration.ConfigurationManager.GetSection(name);
         }

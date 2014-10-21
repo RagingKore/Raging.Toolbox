@@ -13,7 +13,7 @@ namespace Raging.Toolbox.Extensions
         /// <returns>An ICollection&lt;T&gt;.</returns>
         public static ICollection<T> AddRange<T>(this ICollection<T> source, IEnumerable<T> items)
         {
-            Guard.ForNull(() => source);
+            Guard.Null(() => source);
 
             items.ForEach(source.Add);
 
@@ -29,7 +29,7 @@ namespace Raging.Toolbox.Extensions
         /// <returns>An ICollection&lt;T&gt;</returns>
         public static ICollection<T> RemoveRange<T>(this ICollection<T> source, IEnumerable<T> items)
         {
-            Guard.ForNull(() => source);
+            Guard.Null(() => source);
             
             items.ForEach(item => source.Remove(item));
 

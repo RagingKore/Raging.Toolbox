@@ -11,8 +11,8 @@ namespace Raging.Toolbox.Extensions
         /// <returns>A string.</returns>
         public static string Join(this string[] source, string separator = ",")
         {
-            Guard.ForNullOrEmpty(() => source);
-            Guard.ForNullOrEmpty(() => separator);
+            Guard.NullOrEmpty(() => source);
+            Guard.NullOrEmpty(() => separator);
 
             return string.Join(separator, source);
         }

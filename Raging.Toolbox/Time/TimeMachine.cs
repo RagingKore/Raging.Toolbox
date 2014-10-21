@@ -13,7 +13,7 @@ namespace Raging.Toolbox.Time
 
         public void Customize(Func<DateTime> func)
         {
-            Guard.ForNull(() => func);
+            Guard.Null(() => func);
 
             this.nowFunc = func;
         }

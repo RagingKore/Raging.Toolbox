@@ -1,4 +1,6 @@
 ﻿using System;
+using System.Collections;
+using System.Collections.Generic;
 using System.Linq.Expressions;
 using System.Reflection;
 using FluentAssertions;
@@ -13,9 +15,9 @@ namespace Raging.Toolbox.Tests
         public void ForNull_ThrowsArgumentNullException_WhenObjectIsNull()
         {
             // arrange   
-            object argument = null;
+            DateTime? argument = null;
 
-            Action action = () => Guard.ForNull(() => argument);
+            Action action = () => Guard.Null(() => argument);
 
             // act & assert
             action.ShouldThrow<ArgumentNullException>()
@@ -28,7 +30,7 @@ namespace Raging.Toolbox.Tests
             // arrange
             object argument = 0;
 
-            Action action = () => Guard.ForNull(() => argument);
+            Action action = () => Guard.Null(() => argument);
 
             // act & assert
             action.ShouldNotThrow<ArgumentNullException>();
@@ -36,22 +38,23 @@ namespace Raging.Toolbox.Tests
 
         [TestCase(null)]
         [TestCase("")]
-        public void ForNullOrEmpty_ThrowsArgumentNullException_WhenStringIsNullOrEmpty(string argument)
+        public void NullOrEmpty_ThrowsArgumentNullException_WhenStringIsNullOrEmpty(string argument)
         {
             // arrange
-            Action action = () => Guard.ForNullOrEmpty(() => argument);
+            Action action = () => Guard.NullOrEmpty(() => argument);
 
             // act & assert
-            action.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be(ArgumentName);
+            action.ShouldThrow<ArgumentNullException>()
+                .And.ParamName.Should().Be(ArgumentName);
         }
 
         [Test]
-        public void ForNullOrEmpty_DoesNotThrowArgumentNullException_WhenStringIsNotNullOrEmpty()
+        public void NullOrEmpty_DoesNotThrowArgumentNullException_WhenStringIsNotNullOrEmpty()
         {
             // arrange
             string argument = "test";
 
-            Action action = () => Guard.ForNullOrEmpty(() => argument);
+            Action action = () => Guard.NullOrEmpty(() => argument);
 
             // act & assert
             action.ShouldNotThrow<ArgumentNullException>();
@@ -59,10 +62,10 @@ namespace Raging.Toolbox.Tests
 
         [TestCase(null)]
         [TestCase("  ")]
-        public void ForNullOrWhiteSpace_ThrowsArgumentNullException_WhenStringIsNullOrWhiteSpace(string argument)
+        public void NullOrWhiteSpace_ThrowsArgumentNullException_WhenStringIsNullOrWhiteSpace(string argument)
         {
             // arrange
-            Action action = () => Guard.ForNullOrWhiteSpace(() => argument);
+            Action action = () => Guard.NullOrWhiteSpace(() => argument);
 
             // act & assert
             action.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be(ArgumentName);
@@ -74,151 +77,153 @@ namespace Raging.Toolbox.Tests
             // arrange
             string argument = "test";
 
-            Action action = () => Guard.ForNullOrEmpty(() => argument);
+            Action action = () => Guard.NullOrEmpty(() => argument);
 
             // act & assert
             action.ShouldNotThrow<ArgumentNullException>();
         }
 
         [TestCaseSource(typeof(GuardTestsBase), "WhenCollectionIsNullOrEmptyTestCases")]
-        public void ForNullOrEmpty_ThrowsArgumentNullException_WhenCollectionIsNullOrEmpty(string[] argument)
+        public void NullOrEmpty_ThrowsArgumentNullException_WhenCollectionIsNullOrEmpty(string[] argument)
         {
             // arrange
-            Action action = () => Guard.ForNullOrEmpty(() => argument);
+            Action action = () => Guard.NullOrEmpty(() => argument);
 
             // act & assert
-            action.ShouldThrow<ArgumentNullException>().And.ParamName.Should().Be(ArgumentName);
+            action.ShouldThrow<ArgumentNullException>()
+                .And.ParamName.Should().Be(ArgumentName);
         }
 
         [Test]
-        public void ForNullOrEmpty_DoesNotThrowArgumentNullException_WhenCollectionIsNotNullOrEmpty()
+        public void NullOrEmpty_DoesNotThrowArgumentNullException_WhenCollectionIsNotNullOrEmpty()
         {
             // arrange
             var argument = new[] { "test" };
 
-            Action action = () => Guard.ForNullOrEmpty(() => argument);
+            Action action = () => Guard.NullOrEmpty(() => argument);
 
             // act & assert
             action.ShouldNotThrow<ArgumentNullException>();
         }
 
         [Test]
-        public void ForOutOfRange_ThrowsArgumentOutOfRangeException_WhenItemDoesNotExistInCollection()
+        public void OutOfRange_ThrowsArgumentOutOfRangeException_WhenItemDoesNotExistInCollection()
         {
             // arrange
             var range    = new[] { "a", "b" };
             var argument = "c";
 
-            Action action = () => Guard.ForOutOfRange(() => argument, range);
+            Action action = () => Guard.OutOfRange(() => argument, range);
 
             // act & assert
-            action.ShouldThrow<ArgumentOutOfRangeException>().And.ParamName.Should().Be(ArgumentName);
+            action.ShouldThrow<ArgumentOutOfRangeException>()
+                .And.ParamName.Should().Be(ArgumentName);
         }
 
         [Test]
-        public void ForOutOfRange_DoesNotThrowArgumentOutOfRangeException_WhenItemExistsInCollection()
+        public void OutOfRange_DoesNotThrowArgumentOutOfRangeException_WhenItemExistsInCollection()
         {
             // arrange
             var range    = new[] { "a", "b" };
             var argument = "b";
 
-            Action action = () => Guard.ForOutOfRange(() => argument, range);
+            Action action = () => Guard.OutOfRange(() => argument, range);
 
             // act & assert
             action.ShouldNotThrow<ArgumentOutOfRangeException>();
         }
 
-        [TestCaseSource(typeof(GuardTestsBase), "NegativeNumbersTestCases")]
-        public void ForNegative_ThrowsArgumentOutOfRangeException_WhenNumberIsNegative<TArgument>(TArgument argument)  
-        {
-            // arrange
-            Action action = () => InvokeNumericMethod("ForNegative", () => argument);
+        //[TestCaseSource(typeof(GuardTestsBase), "NegativeNumbersTestCases")]
+        //public void ForNegative_ThrowsArgumentOutOfRangeException_WhenNumberIsNegative<TArgument>(TArgument argument)  
+        //{
+        //    // arrange
+        //    Action action = () => InvokeNumericMethod("ForNegative", () => argument);
              
-            // act & assert
-            action.ShouldThrow<TargetInvocationException>()
-                .And.InnerException.Should()
-                .BeOfType<ArgumentOutOfRangeException>();
-        }
+        //    // act & assert
+        //    action.ShouldThrow<TargetInvocationException>()
+        //        .And.InnerException.Should()
+        //        .BeOfType<ArgumentOutOfRangeException>();
+        //}
 
-        [TestCaseSource(typeof(GuardTestsBase), "PositiveNumbersTestCases")]
-        [TestCaseSource(typeof(GuardTestsBase), "ZeroNumbersTestCases")]
-        public void ForNegative_DoesNotThrowArgumentOutOfRangeException_WhenNumberIsPositiveOrZero<TArgument>(TArgument argument)
-        {
-            // arrange
-            Action action = () => InvokeNumericMethod("ForNegative", () => argument);
+        //[TestCaseSource(typeof(GuardTestsBase), "PositiveNumbersTestCases")]
+        //[TestCaseSource(typeof(GuardTestsBase), "ZeroNumbersTestCases")]
+        //public void ForNegative_DoesNotThrowArgumentOutOfRangeException_WhenNumberIsPositiveOrZero<TArgument>(TArgument argument)
+        //{
+        //    // arrange
+        //    Action action = () => InvokeNumericMethod("ForNegative", () => argument);
 
-            // act & assert
-            action.ShouldNotThrow<Exception>();
-        }
+        //    // act & assert
+        //    action.ShouldNotThrow<Exception>();
+        //}
 
-        [TestCaseSource(typeof(GuardTestsBase), "NegativeNumbersTestCases")]
-        [TestCaseSource(typeof(GuardTestsBase), "ZeroNumbersTestCases")]
-        public void ForNegativeOrZero_ThrowsArgumentOutOfRangeException_WhenNumberIsNegativeOrZero<TArgument>(TArgument argument)
-        {
-            // arrange
-            Action action = () => InvokeNumericMethod("ForNegativeOrZero", () => argument);
+        //[TestCaseSource(typeof(GuardTestsBase), "NegativeNumbersTestCases")]
+        //[TestCaseSource(typeof(GuardTestsBase), "ZeroNumbersTestCases")]
+        //public void ForNegativeOrZero_ThrowsArgumentOutOfRangeException_WhenNumberIsNegativeOrZero<TArgument>(TArgument argument)
+        //{
+        //    // arrange
+        //    Action action = () => InvokeNumericMethod("ForNegativeOrZero", () => argument);
 
-            // act & assert
-            action.ShouldThrow<TargetInvocationException>()
-                .And.InnerException.Should()
-                .BeOfType<ArgumentOutOfRangeException>();
-        }
+        //    // act & assert
+        //    action.ShouldThrow<TargetInvocationException>()
+        //        .And.InnerException.Should()
+        //        .BeOfType<ArgumentOutOfRangeException>();
+        //}
 
-        [TestCaseSource(typeof(GuardTestsBase), "PositiveNumbersTestCases")]
-        public void ForNegativeOrZero_DoesNotThrowArgumentOutOfRangeException_WhenNumberIsPositive<TArgument>(TArgument argument)
-        {
-            // arrange
-            Action action = () => InvokeNumericMethod("ForNegativeOrZero", () => argument);
+        //[TestCaseSource(typeof(GuardTestsBase), "PositiveNumbersTestCases")]
+        //public void ForNegativeOrZero_DoesNotThrowArgumentOutOfRangeException_WhenNumberIsPositive<TArgument>(TArgument argument)
+        //{
+        //    // arrange
+        //    Action action = () => InvokeNumericMethod("ForNegativeOrZero", () => argument);
 
-            // act & assert
-            action.ShouldNotThrow<Exception>();
-        }
+        //    // act & assert
+        //    action.ShouldNotThrow<Exception>();
+        //}
 
-        [TestCaseSource(typeof(GuardTestsBase), "PositiveNumbersTestCases")]
-        public void ForPositive_ThrowsArgumentOutOfRangeException_WhenNumberIsPositive<TArgument>(TArgument argument)
-        {
-            // arrange
-            Action action = () => InvokeNumericMethod("ForPositive", () => argument);
+        //[TestCaseSource(typeof(GuardTestsBase), "PositiveNumbersTestCases")]
+        //public void ForPositive_ThrowsArgumentOutOfRangeException_WhenNumberIsPositive<TArgument>(TArgument argument)
+        //{
+        //    // arrange
+        //    Action action = () => InvokeNumericMethod("ForPositive", () => argument);
 
-            // act & assert
-            action.ShouldThrow<TargetInvocationException>()
-                .And.InnerException.Should()
-                .BeOfType<ArgumentOutOfRangeException>();
-        }
+        //    // act & assert
+        //    action.ShouldThrow<TargetInvocationException>()
+        //        .And.InnerException.Should()
+        //        .BeOfType<ArgumentOutOfRangeException>();
+        //}
 
-        [TestCaseSource(typeof(GuardTestsBase), "NegativeNumbersTestCases")]
-        [TestCaseSource(typeof(GuardTestsBase), "ZeroNumbersTestCases")]
-        public void ForPositive_DoesNotThrowArgumentOutOfRangeException_WhenNumberIsNegativeOrZero<TArgument>(TArgument argument)
-        {
-            // arrange
-            Action action = () => InvokeNumericMethod("ForPositive", () => argument);
+        //[TestCaseSource(typeof(GuardTestsBase), "NegativeNumbersTestCases")]
+        //[TestCaseSource(typeof(GuardTestsBase), "ZeroNumbersTestCases")]
+        //public void ForPositive_DoesNotThrowArgumentOutOfRangeException_WhenNumberIsNegativeOrZero<TArgument>(TArgument argument)
+        //{
+        //    // arrange
+        //    Action action = () => InvokeNumericMethod("ForPositive", () => argument);
 
-            // act & assert
-            action.ShouldNotThrow<Exception>();
-        }
+        //    // act & assert
+        //    action.ShouldNotThrow<Exception>();
+        //}
 
-        [TestCaseSource(typeof(GuardTestsBase), "PositiveNumbersTestCases")]
-        [TestCaseSource(typeof(GuardTestsBase), "ZeroNumbersTestCases")]
-        public void ForPositiveOrZero_ThrowsArgumentOutOfRangeException_WhenNumberIsPositiveOrZero<TArgument>(TArgument argument)
-        {
-            // arrange
-            Action action = () => InvokeNumericMethod("ForPositiveOrZero", () => argument);
+        //[TestCaseSource(typeof(GuardTestsBase), "PositiveNumbersTestCases")]
+        //[TestCaseSource(typeof(GuardTestsBase), "ZeroNumbersTestCases")]
+        //public void ForPositiveOrZero_ThrowsArgumentOutOfRangeException_WhenNumberIsPositiveOrZero<TArgument>(TArgument argument)
+        //{
+        //    // arrange
+        //    Action action = () => InvokeNumericMethod("ForPositiveOrZero", () => argument);
 
-            // act & assert
-            action.ShouldThrow<TargetInvocationException>()
-                .And.InnerException.Should()
-                .BeOfType<ArgumentOutOfRangeException>();
-        }
+        //    // act & assert
+        //    action.ShouldThrow<TargetInvocationException>()
+        //        .And.InnerException.Should()
+        //        .BeOfType<ArgumentOutOfRangeException>();
+        //}
 
-        [TestCaseSource(typeof(GuardTestsBase), "NegativeNumbersTestCases")]
-        public void ForPositiveOrZero_DoesNotThrowArgumentOutOfRangeException_WhenNumberIsNegative<TArgument>(TArgument argument)
-        {
-            // arrange
-            Action action = () => InvokeNumericMethod("ForPositiveOrZero", () => argument);
+        //[TestCaseSource(typeof(GuardTestsBase), "NegativeNumbersTestCases")]
+        //public void ForPositiveOrZero_DoesNotThrowArgumentOutOfRangeException_WhenNumberIsNegative<TArgument>(TArgument argument)
+        //{
+        //    // arrange
+        //    Action action = () => InvokeNumericMethod("ForPositiveOrZero", () => argument);
 
-            // act & assert
-            action.ShouldNotThrow<Exception>();
-        }
+        //    // act & assert
+        //    action.ShouldNotThrow<Exception>();
+        //}
     }
 
     public abstract class GuardTestsBase

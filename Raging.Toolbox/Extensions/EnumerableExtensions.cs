@@ -55,8 +55,8 @@ namespace Raging.Toolbox.Extensions
         /// <param name="action">   The action. </param>
         public static IEnumerable<T> ForEach<T>(this IEnumerable<T> source, Action<T> action)
         {
-            Guard.ForNull(() => source);
-            Guard.ForNull(() => action);
+            Guard.Null(() => source);
+            Guard.Null(() => action);
 
             foreach(var item in source) action(item);
 
@@ -95,16 +95,16 @@ namespace Raging.Toolbox.Extensions
         /// </returns>
         public static string Join(this IEnumerable<string> source, string separator = ",")
         {
-            Guard.ForNull(() => source);
-            Guard.ForNullOrEmpty(() => separator);
+            Guard.Null(() => source);
+            Guard.NullOrEmpty(() => separator);
 
             return string.Join(separator, source);
         }
 
         public static IEnumerable<T> Apply<T>(this IEnumerable<T> source, Action<T> action)
         {
-            Guard.ForNull(() => source);
-            Guard.ForNull(() => action);
+            Guard.Null(() => source);
+            Guard.Null(() => action);
 
             foreach (var item in source)
             {
@@ -115,8 +115,8 @@ namespace Raging.Toolbox.Extensions
 
         public static IEnumerable<TSource> Apply<TSource>(this IEnumerable<TSource> source, Action<TSource, int> action)
         {
-            Guard.ForNull(() => source);
-            Guard.ForNull(() => action);
+            Guard.Null(() => source);
+            Guard.Null(() => action);
 
             var i = 0;
             foreach (var item in source)
@@ -145,7 +145,7 @@ namespace Raging.Toolbox.Extensions
             Func<TSource, TKey> keySelector,
             bool descending)
         {
-            Guard.ForNull(() => source);
+            Guard.Null(() => source);
 
             return descending
                 ? source.OrderByDescending(keySelector)
@@ -153,24 +153,22 @@ namespace Raging.Toolbox.Extensions
         }
 
         /// <summary>
-        /// An IQueryable&lt;TSource&gt; extension method to order with direction.
+        ///     An IQueryable&lt;TSource&gt; extension method to order with direction.
         /// </summary>
-        ///
         /// <typeparam name="TSource">Type of the source.</typeparam>
         /// <typeparam name="TKey">Type of the key.</typeparam>
         /// <param name="source">the source enumerable.</param>
         /// <param name="keySelector">The key selector.</param>
         /// <param name="descending">true to descending.</param>
-        ///
         /// <returns>
-        /// An IOrderedEnumerable&lt;TSource&gt;
+        ///     An IOrderedEnumerable&lt;TSource&gt;
         /// </returns>
         public static IOrderedQueryable<TSource> OrderBy<TSource, TKey>(
             this IQueryable<TSource> source,
             Expression<Func<TSource, TKey>> keySelector,
             bool descending)
         {
-            Guard.ForNull(() => source);
+            Guard.Null(() => source);
 
             return descending
                 ? source.OrderByDescending(keySelector)

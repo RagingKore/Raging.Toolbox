@@ -2,7 +2,7 @@
 
 namespace Raging.Toolbox.Messaging
 {
-    public interface IQueryRunner
+    public interface IQueryService
     {
         Task<TResult> RunAsync<TResult>(IQuery<TResult> query);
 

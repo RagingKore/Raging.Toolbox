@@ -40,7 +40,7 @@ namespace Raging.Toolbox
     ///     so that type inference can be leveraged for the given default value. There 
     ///     is no need to specify the T parameter for the Create method overloads.
     /// </summary>
-    static partial class AmbientSingleton
+    public static partial class AmbientSingleton
     {
         /// <summary>
         /// Creates an ambient singleton with no default value and a specific identifier.
@@ -179,7 +179,7 @@ namespace Raging.Toolbox
     /// </example>
     /// </remarks>
     /// <nuget id="netfx-System.AmbientSingleton"/>
-    partial class AmbientSingleton<T>
+    public partial class AmbientSingleton<T>
     {
         private string slotName;
         private Lazy<T> defaultValue;

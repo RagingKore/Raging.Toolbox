@@ -49,7 +49,7 @@
     <Compile Include="IMessageHandler.cs" />
     <Compile Include="IQuery.cs" />
     <Compile Include="IQueryHandler.cs" />
-    <Compile Include="IQueryRunner.cs" />
+    <Compile Include="IQueryService.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
   </ItemGroup>
   <ItemGroup>

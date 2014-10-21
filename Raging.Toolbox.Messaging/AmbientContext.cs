@@ -3,27 +3,26 @@ using System.Threading.Tasks;
 
 namespace Raging.Toolbox.Messaging
 {
-    public static class QueryRunner
+    public static class QueryService
     {
-        private static Func<IQueryRunner> factoryFunc;
+        private static AmbientSingleton<IQueryService> queryServiceSingleton;
 
-        public static void SetFactory(Func<IQueryRunner> factory)
+        public static void SetFactory(Func<IQueryService> factory)
         {
             Guard.Null(() => factory);
-
-            factoryFunc = factory;
+            queryServiceSingleton = AmbientSingleton.Create(factory);
         }
 
         public static Task<TResult> RunAsync<TResult>(IQuery<TResult> query)
         {
             Guard.Null(() => query);
-            return factoryFunc().RunAsync(query);
+            return queryServiceSingleton.Value.RunAsync(query);
         }
 
         public static TResult Run<TResult>(IQuery<TResult> query)
         {
             Guard.Null(() => query);
-            return factoryFunc().Run(query);
+            return queryServiceSingleton.Value.Run(query);
         }
     }
 

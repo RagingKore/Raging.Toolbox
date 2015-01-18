@@ -123,5 +123,4 @@ namespace Raging.Toolbox.Tests.Extensions
             public long Id { get; set; }
         }
     }
-
 }

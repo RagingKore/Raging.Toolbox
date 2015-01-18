@@ -6,6 +6,8 @@ namespace Raging.Toolbox.Time
     {
         DateTime Now { get; }
 
+        DateTime Today { get; }
+
         void Customize(Func<DateTime> dateFunc);
 
         void TravelTo(DateTime date);

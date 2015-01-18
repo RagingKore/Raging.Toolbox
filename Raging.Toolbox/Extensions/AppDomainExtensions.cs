@@ -6,7 +6,6 @@ using System.Reflection;
 
 namespace Raging.Toolbox.Extensions
 {
-
     public static class AppDomainExtensions
     {
         /// <summary>
@@ -18,6 +17,8 @@ namespace Raging.Toolbox.Extensions
         /// </returns>
         public static IEnumerable<Type> GetTypes(this AppDomain domain)
         {
+            Guard.Null(() => domain, domain);
+
             var types = domain
                 .GetAssemblies()
                 .SelectMany(a => a.GetLoadableTypes());
@@ -36,6 +37,8 @@ namespace Raging.Toolbox.Extensions
         /// </returns>
         public static IEnumerable<Type> GetTypesAssignableTo(this AppDomain domain, Type baseType)
         {
+            Guard.Null(() => domain, domain);
+
             var types = domain
                 .GetTypes()
                 .Where(baseType.IsAssignableFrom)
@@ -53,6 +56,8 @@ namespace Raging.Toolbox.Extensions
         /// </returns>
         public static IEnumerable<Type> GetReferencedTypes(this AppDomain domain)
         {
+            Guard.Null(() => domain, domain);
+
             var types = domain
                 .GetReferencedAssemblies()
                 .SelectMany(a => a.GetLoadableTypes());
@@ -73,11 +78,15 @@ namespace Raging.Toolbox.Extensions
         /// </returns>
         public static IEnumerable<Assembly> GetReferencedAssemblies(this AppDomain domain)
         {
+            Guard.Null(() => domain, domain);
+
             var files = Directory.GetFiles(domain.BaseDirectory, "*.dll", SearchOption.AllDirectories);
 
-            foreach(var filename in files)
+            foreach (var filename in files)
             {
-                Assembly.LoadFile(filename);
+                // Assembly.LoadFile(filename); --> this can not be done, because this will lock the file and we will have problems when rebuilding the application
+                // http://stackoverflow.com/questions/1031431/system-reflection-assembly-loadfile-locks-file
+                Assembly.Load(File.ReadAllBytes(filename));
             }
 
             return AppDomain.CurrentDomain
@@ -86,5 +95,4 @@ namespace Raging.Toolbox.Extensions
                 .Distinct(EqualityHelper<Assembly>.CreateComparer(assembly => assembly.FullName));
         }
     }
-
 }

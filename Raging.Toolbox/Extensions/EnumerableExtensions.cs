@@ -174,5 +174,82 @@ namespace Raging.Toolbox.Extensions
                 ? source.OrderByDescending(keySelector)
                 : source.OrderBy(keySelector);
         }
+
+        /// <summary>
+        /// An extension method that joins all members of the collection to 
+        ///     a single separated string.
+        /// </summary>
+        /// <typeparam name="T">A type that overrides the object.ToString() method.</typeparam>
+        /// <param name="source">The value to act on.</param>
+        /// <param name="separator">(Optional) the separator. By default, a comma is used.</param>
+        /// <returns>A string.</returns>
+        public static string Join<T>(this IEnumerable<T> source, string separator = ",")
+        {
+            return string.Join(separator, source);
+        }
+
+        /// <summary>
+        ///     Returns all distinct elements of the given source, where "distinctness"
+        ///     is determined via a projection and the default equality comparer for the projected type.
+        /// </summary>
+        /// <remarks>
+        ///     This operator uses deferred execution and streams the results, although
+        ///     a set of already-seen keys is retained. If a key is seen multiple times,
+        ///     only the first element with that key is returned.
+        /// </remarks>
+        /// <typeparam name="TSource">Type of the source sequence</typeparam>
+        /// <typeparam name="TKey">Type of the projected element</typeparam>
+        /// <param name="source">Source sequence</param>
+        /// <param name="keySelector">Projection for determining "distinctness"</param>
+        /// <returns>
+        ///     A sequence consisting of distinct elements from the source sequence,
+        ///     comparing them by the specified key projection.
+        /// </returns>
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector)
+        {
+            return source.DistinctBy(keySelector, null);
+        }
+
+        /// <summary>
+        ///     Returns all distinct elements of the given source, where "distinctness"
+        ///     is determined via a projection and the specified comparer for the projected type.
+        /// </summary>
+        /// <remarks>
+        ///     This operator uses deferred execution and streams the results, although
+        ///     a set of already-seen keys is retained. If a key is seen multiple times,
+        ///     only the first element with that key is returned.
+        /// </remarks>
+        /// <typeparam name="TSource">Type of the source sequence</typeparam>
+        /// <typeparam name="TKey">Type of the projected element</typeparam>
+        /// <param name="source">Source sequence</param>
+        /// <param name="keySelector">Projection for determining "distinctness"</param>
+        /// <param name="comparer">
+        ///     The equality comparer to use to determine whether or not keys are equal.
+        ///     If null, the default equality comparer for <c>TSource</c> is used.
+        /// </param>
+        /// <returns>
+        ///     A sequence consisting of distinct elements from the source sequence,
+        ///     comparing them by the specified key projection.
+        /// </returns>
+        public static IEnumerable<TSource> DistinctBy<TSource, TKey>(
+            this IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            IEqualityComparer<TKey> comparer)
+        {
+            Guard.Null(() => source, source);
+            Guard.Null(() => keySelector, keySelector);
+
+            return DistinctByImpl(source, keySelector, comparer);
+        }
+
+        private static IEnumerable<TSource> DistinctByImpl<TSource, TKey>(
+            IEnumerable<TSource> source,
+            Func<TSource, TKey> keySelector,
+            IEqualityComparer<TKey> comparer)
+        {
+            var knownKeys = new HashSet<TKey>(comparer);
+            return source.Where(element => knownKeys.Add(keySelector(element)));
+        }
     }
 }

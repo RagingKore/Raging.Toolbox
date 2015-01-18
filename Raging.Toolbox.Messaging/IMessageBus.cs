@@ -6,7 +6,7 @@ namespace Raging.Toolbox.Messaging
     public interface IMessageBus : IDisposable
     {
         /// <summary>
-        /// Publishes an event to all it's subscribed handlers.
+        /// Publishes an event to all it's subscribed handlers.epah eu tentei jogar ctg e co igor
         /// </summary>
         /// <typeparam name="TEvent">Type of the event.</typeparam>
         /// <param name="message">The event message.</param>

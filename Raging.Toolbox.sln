@@ -1,7 +1,7 @@
 ﻿
 Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio 2013
-VisualStudioVersion = 12.0.30723.0
+VisualStudioVersion = 12.0.31101.0
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raging.Toolbox", "Raging.Toolbox\Raging.Toolbox.csproj", "{03CA1F8F-27C0-4477-BA81-8EC6B0B447E3}"
 EndProject
@@ -9,9 +9,11 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raging.Toolbox.Tests", "Rag
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raging.Toolbox.Messaging", "Raging.Toolbox.Messaging\Raging.Toolbox.Messaging.csproj", "{1C32400E-0467-4F24-BD90-48D868D65971}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raging.Toolbox.Messaging.Rebus", "Raging.Toolbox.Messaging.Rebus\Raging.Toolbox.Messaging.Rebus.csproj", "{1341C8EA-C266-48D8-920D-3544A703E595}"
-EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raging.Toolbox.Testing.Moq", "Raging.Toolbox.Testing.Moq\Raging.Toolbox.Testing.Moq.csproj", "{1304CF90-4A02-4085-BE61-87CFB4D98DC8}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raging.Toolbox.DependencyResolution.Autofac", "Raging.Toolbox.DependencyResolution.Autofac\Raging.Toolbox.DependencyResolution.Autofac.csproj", "{D634BCA3-CFA8-4787-A576-2B47271EE2C0}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raging.Toolbox.Testing.FakeItEasy", "Raging.Toolbox.Testing.FakeItEasy\Raging.Toolbox.Testing.FakeItEasy.csproj", "{734B056D-8085-4949-BF78-4078E45DE28D}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -31,14 +33,18 @@ Global
 		{1C32400E-0467-4F24-BD90-48D868D65971}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1C32400E-0467-4F24-BD90-48D868D65971}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1C32400E-0467-4F24-BD90-48D868D65971}.Release|Any CPU.Build.0 = Release|Any CPU
-		{1341C8EA-C266-48D8-920D-3544A703E595}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
-		{1341C8EA-C266-48D8-920D-3544A703E595}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{1341C8EA-C266-48D8-920D-3544A703E595}.Release|Any CPU.ActiveCfg = Release|Any CPU
-		{1341C8EA-C266-48D8-920D-3544A703E595}.Release|Any CPU.Build.0 = Release|Any CPU
 		{1304CF90-4A02-4085-BE61-87CFB4D98DC8}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{1304CF90-4A02-4085-BE61-87CFB4D98DC8}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{1304CF90-4A02-4085-BE61-87CFB4D98DC8}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{1304CF90-4A02-4085-BE61-87CFB4D98DC8}.Release|Any CPU.Build.0 = Release|Any CPU
+		{D634BCA3-CFA8-4787-A576-2B47271EE2C0}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{D634BCA3-CFA8-4787-A576-2B47271EE2C0}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{D634BCA3-CFA8-4787-A576-2B47271EE2C0}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{D634BCA3-CFA8-4787-A576-2B47271EE2C0}.Release|Any CPU.Build.0 = Release|Any CPU
+		{734B056D-8085-4949-BF78-4078E45DE28D}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{734B056D-8085-4949-BF78-4078E45DE28D}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{734B056D-8085-4949-BF78-4078E45DE28D}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{734B056D-8085-4949-BF78-4078E45DE28D}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

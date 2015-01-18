@@ -34,6 +34,8 @@
     <Reference Include="System" />
     <Reference Include="System.Configuration" />
     <Reference Include="System.Core" />
+    <Reference Include="System.Net.Http" />
+    <Reference Include="System.Net.Http.Formatting, Version=4.0.0.0, Culture=neutral, PublicKeyToken=31bf3856ad364e35, processorArchitecture=MSIL" />
     <Reference Include="System.Runtime.Serialization" />
     <Reference Include="System.Xml.Linq" />
     <Reference Include="System.Data.DataSetExtensions" />
@@ -43,13 +45,27 @@
   </ItemGroup>
   <ItemGroup>
     <Compile Include="AmbientSingleton.cs" />
+    <Compile Include="Attributes.cs" />
     <Compile Include="Configuration\ConfigurationManager.cs" />
     <Compile Include="DependencyResolution\IDependencyResolver.cs" />
+    <Compile Include="Enum.cs" />
     <Compile Include="EqualityHelper.cs" />
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\NumberExtensions.cs" />
     <Compile Include="Extensions\SerializationExtensions.cs" />
     <Compile Include="Mapping\IObjectMapper.cs" />
+    <Compile Include="Mapping\SystemMapper.cs" />
+    <Compile Include="Net\Adapters\HttpClientAdapter.cs" />
+    <Compile Include="Net\Adapters\HttpContentAdapter.cs" />
+    <Compile Include="Net\Adapters\HttpResponseMessageAdapter.cs" />
+    <Compile Include="Net\Adapters\IHttpClientAdapter.cs" />
+    <Compile Include="Net\Adapters\IHttpContentAdapter.cs" />
+    <Compile Include="Net\Adapters\IHttpResponseMessageAdapter.cs" />
+    <Compile Include="Net\IRestClient.cs" />
+    <Compile Include="Net\RestClientResponseMessage.cs" />
+    <Compile Include="Net\Route.cs" />
+    <Compile Include="Net\RouteAttribute.cs" />
+    <Compile Include="Net\TestableRestClient.cs" />
     <Compile Include="SequentialGuidGenerator.cs" />
     <Compile Include="Extensions\AppDomainExtensions.cs" />
     <Compile Include="Extensions\ArrayExtensions.cs" />

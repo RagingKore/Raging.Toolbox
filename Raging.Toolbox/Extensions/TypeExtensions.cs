@@ -33,7 +33,7 @@ namespace Raging.Toolbox.Extensions
         /// <returns>true if type is a numeric type, false if not.</returns>
         public static bool IsNumericType(this Type source)
         {
-            switch (Type.GetTypeCode(source))
+            switch(Type.GetTypeCode(source))
             {
                 case TypeCode.Byte:
                 case TypeCode.SByte:
@@ -50,6 +50,30 @@ namespace Raging.Toolbox.Extensions
                 default:
                     return false;
             }
+        }
+
+        /// <summary>A Type extension method that gets the value of any system attribute.</summary>
+        /// <remarks>Sergio Silveira, 24-11-2014.</remarks>
+        /// <tparam name="TAttribute">Type of the attribute.</tparam>
+        /// <tparam name="TValue">Type of the value.</tparam>
+        /// <param name="type">The type to act on.</param>
+        /// <param name="valueSelector">The value selector.</param>
+        /// <returns>The attribute value.</returns>
+        public static TValue GetAttributeValue<TAttribute, TValue>(this Type type, Func<TAttribute, TValue> valueSelector)
+            where TAttribute : Attribute
+        {
+            var attribute = type
+                .GetCustomAttributes(typeof(TAttribute), true)
+                .FirstOrDefault() as TAttribute;
+
+            return attribute != null
+                ? valueSelector(attribute)
+                : default(TValue);
+        }
+
+        public static bool IsNullableType(this Type type)
+        {
+            return type.IsGenericType && type.GetGenericTypeDefinition() == typeof(Nullable<>);
         }
     }
 }

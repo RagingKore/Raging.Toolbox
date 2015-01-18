@@ -2,7 +2,7 @@
 
 namespace Raging.Toolbox.Time
 {
-    internal class TimeMachine : ITimeMachine
+    internal class UniversalTimeMachine : ITimeMachine
     {
         private Func<DateTime> nowFunc = () => DateTime.UtcNow;
 
@@ -11,9 +11,14 @@ namespace Raging.Toolbox.Time
             get { return this.nowFunc(); }
         }
 
+        public DateTime Today
+        {
+            get { return this.nowFunc().Date; }
+        }
+
         public void Customize(Func<DateTime> func)
         {
-            Guard.Null(() => func);
+            Guard.Null(() => func, func);
 
             this.nowFunc = func;
         }

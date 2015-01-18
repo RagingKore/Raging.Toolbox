@@ -4,14 +4,13 @@
   <PropertyGroup>
     <Configuration Condition=" '$(Configuration)' == '' ">Debug</Configuration>
     <Platform Condition=" '$(Platform)' == '' ">AnyCPU</Platform>
-    <ProjectGuid>{1C32400E-0467-4F24-BD90-48D868D65971}</ProjectGuid>
+    <ProjectGuid>{D634BCA3-CFA8-4787-A576-2B47271EE2C0}</ProjectGuid>
     <OutputType>Library</OutputType>
     <AppDesignerFolder>Properties</AppDesignerFolder>
-    <RootNamespace>Raging.Toolbox.Messaging</RootNamespace>
-    <AssemblyName>Raging.Toolbox.Messaging</AssemblyName>
+    <RootNamespace>Raging.Toolbox.DependencyResolution.Autofac</RootNamespace>
+    <AssemblyName>Raging.Toolbox.DependencyResolution.Autofac</AssemblyName>
     <TargetFrameworkVersion>v4.5.1</TargetFrameworkVersion>
     <FileAlignment>512</FileAlignment>
-    <TargetFrameworkProfile />
   </PropertyGroup>
   <PropertyGroup Condition=" '$(Configuration)|$(Platform)' == 'Debug|AnyCPU' ">
     <DebugSymbols>true</DebugSymbols>
@@ -31,6 +30,9 @@
     <WarningLevel>4</WarningLevel>
   </PropertyGroup>
   <ItemGroup>
+    <Reference Include="Autofac">
+      <HintPath>..\packages\Autofac.3.5.2\lib\net40\Autofac.dll</HintPath>
+    </Reference>
     <Reference Include="System" />
     <Reference Include="System.Core" />
     <Reference Include="System.Xml.Linq" />
@@ -40,17 +42,14 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="IAsyncMessageHandler.cs" />
-    <Compile Include="IAsyncQueryHandler.cs" />
-    <Compile Include="ICommand.cs" />
-    <Compile Include="IEvent.cs" />
-    <Compile Include="IMessageBus.cs" />
-    <Compile Include="IMessageHandler.cs" />
-    <Compile Include="IQuery.cs" />
-    <Compile Include="IQueryHandler.cs" />
-    <Compile Include="IQueryService.cs" />
+    <Compile Include="AutofacDependencyResolver.cs" />
+    <Compile Include="AutofacDependencyResolverModule.cs" />
+    <Compile Include="ContainerBuilderExtensions.cs" />
+    <Compile Include="LifetimeScopeExtensions.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
-    <Compile Include="SystemQueryService.cs" />
+  </ItemGroup>
+  <ItemGroup>
+    <None Include="packages.config" />
   </ItemGroup>
   <ItemGroup>
     <ProjectReference Include="..\Raging.Toolbox\Raging.Toolbox.csproj">

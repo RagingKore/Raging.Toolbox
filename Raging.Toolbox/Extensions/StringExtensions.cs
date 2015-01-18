@@ -111,6 +111,26 @@ namespace Raging.Toolbox.Extensions
             return string.Format(ci, source, args);
         }
 
+
+        /// <summary>
+        /// Checks if the string is after another string within a larger string.
+        /// </summary>
+        /// <param name="source">The current string</param>
+        /// <param name="other">The other string</param>
+        /// <param name="in">The place to search</param>
+        /// <returns>True if this string is before the other</returns>
+        public static bool IsAfter(this string source, string other, string @in)
+        {
+            Guard.Null(() => source);
+            Guard.Null(() => other);
+            Guard.Null(() => @in);
+
+            var thisIndex = @in.IndexOf(source, StringComparison.Ordinal);
+            var otherIndex = @in.IndexOf(other, StringComparison.Ordinal);
+
+            return thisIndex > otherIndex;
+        }
+
         public static byte[] GetBytes(this string source, Encoding encoding)
         {
             return encoding.GetBytes(source);

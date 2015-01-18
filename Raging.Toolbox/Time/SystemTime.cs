@@ -1,32 +1,49 @@
-﻿using System.ComponentModel;
+﻿using System;
 
 namespace Raging.Toolbox.Time
 {
     public static class SystemTime
     {
-        private static ITimeMachine timeMachine = new TimeMachine();
+        private static AmbientSingleton<ITimeMachine> singleton;
 
-        public static System.DateTime Now
+        static SystemTime()
         {
-            get { return timeMachine.Now.ToLocalTime(); }
+            singleton = AmbientSingleton.Create(new UniversalTimeMachine() as ITimeMachine);
         }
 
-        public static System.DateTime UtcNow
+        public static DateTime Now
         {
-            get { return timeMachine.Now; }
+            get { return singleton.Value.Now; }
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
-        public static ITimeMachine TimeMachine
+        public static DateTime Today
         {
-            get { return timeMachine; }
-            set { timeMachine = value ?? timeMachine; }
+            get { return singleton.Value.Today; }
         }
 
-        [EditorBrowsable(EditorBrowsableState.Never)]
+        public static void Customize(Func<DateTime> customizeFunc)
+        {
+            singleton.Value.Customize(customizeFunc);
+        }
+
+        public static void TravelTo(DateTime date)
+        {
+            singleton.Value.TravelTo(date);
+        }
+
+        public static void FreezeTime(DateTime date)
+        {
+            singleton.Value.FreezeTime(date);
+        }
+
         public static void Reset()
         {
-            timeMachine = new TimeMachine();
+            singleton.Value.Reset();
+        }
+
+        public static ITimeMachine SetFactory(Func<ITimeMachine> factory)
+        {
+            return (singleton = AmbientSingleton.Create(factory())).Value;
         }
     }
 }

@@ -15,6 +15,10 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raging.Toolbox.DependencyRe
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raging.Toolbox.Testing.FakeItEasy", "Raging.Toolbox.Testing.FakeItEasy\Raging.Toolbox.Testing.FakeItEasy.csproj", "{734B056D-8085-4949-BF78-4078E45DE28D}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raging.Toolbox.Rebus", "Raging.Toolbox.Rebus\Raging.Toolbox.Rebus.csproj", "{669841CB-117A-4B7D-9B92-D089064E5AE6}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Raging.Toolbox.Rebus.Autofac", "Raging.Toolbox.Rebus.Autofac\Raging.Toolbox.Rebus.Autofac.csproj", "{A3AAF603-1B5E-4640-AAEC-2AEA5E201784}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -45,6 +49,14 @@ Global
 		{734B056D-8085-4949-BF78-4078E45DE28D}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{734B056D-8085-4949-BF78-4078E45DE28D}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{734B056D-8085-4949-BF78-4078E45DE28D}.Release|Any CPU.Build.0 = Release|Any CPU
+		{669841CB-117A-4B7D-9B92-D089064E5AE6}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{669841CB-117A-4B7D-9B92-D089064E5AE6}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{669841CB-117A-4B7D-9B92-D089064E5AE6}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{669841CB-117A-4B7D-9B92-D089064E5AE6}.Release|Any CPU.Build.0 = Release|Any CPU
+		{A3AAF603-1B5E-4640-AAEC-2AEA5E201784}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{A3AAF603-1B5E-4640-AAEC-2AEA5E201784}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{A3AAF603-1B5E-4640-AAEC-2AEA5E201784}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{A3AAF603-1B5E-4640-AAEC-2AEA5E201784}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

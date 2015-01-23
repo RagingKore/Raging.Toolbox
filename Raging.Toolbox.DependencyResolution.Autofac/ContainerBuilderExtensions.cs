@@ -149,5 +149,26 @@ namespace Raging.Toolbox.DependencyResolution.Autofac
 
             return builder.RegisterSettings<TSettings>(configurationSectionNameByConvention);
         }
+
+        /// <summary>
+        ///     A ContainerBuilder extension method that builds and register the built container.
+        /// </summary>
+        /// <param name="builder">The builder to act on.</param>
+        /// <returns>
+        /// An IContainer.
+        /// </returns>
+        public static IContainer BuildAndRegisterContainer(this ContainerBuilder builder)
+        {
+            IContainer container = null;
+
+            // register autofac container factory, since we only have access to the container after it's built
+            // ReSharper disable once AccessToModifiedClosure
+            builder.RegisterInstance<Func<IContainer>>(() => container);
+
+            // build and store container
+            container = builder.Build();
+
+            return container;
+        }
     }
 }

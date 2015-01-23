@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using Autofac;
+using Autofac.Builder;
 using Raging.Toolbox.Extensions;
 
 namespace Raging.Toolbox.DependencyResolution.Autofac

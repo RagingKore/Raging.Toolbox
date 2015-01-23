@@ -28,9 +28,10 @@ namespace Raging.Toolbox.Extensions
 
         public static T To<T>(this object source, CultureInfo ci)
         {
-            Guard.Null(() => source);
-
             var type = typeof(T);
+
+            if (source.GetType().UnderlyingSystemType == type)
+                return (T)source;
 
             if (type.IsPrimitive)
                 return (T)Convert.ChangeType(source, type, ci);
@@ -38,9 +39,14 @@ namespace Raging.Toolbox.Extensions
             if (type.IsEnum)
                 return (T)Enum.Parse(type, source.ToString());
 
+            if (source.GetType().UnderlyingSystemType == typeof(string))
+                return (T)TypeDescriptor
+                    .GetConverter(type)
+                    .ConvertFromString(null, ci, (string)source);
+
             return (T)TypeDescriptor
                 .GetConverter(type)
-                .ConvertFrom(source);
+                .ConvertFrom(null, ci, source);
         }
 
         public static bool TryTo<T>(this object source, out T convertedValue)

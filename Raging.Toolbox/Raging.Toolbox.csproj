@@ -53,6 +53,7 @@
     <Compile Include="Extensions\AssemblyExtensions.cs" />
     <Compile Include="Extensions\NumberExtensions.cs" />
     <Compile Include="Extensions\SerializationExtensions.cs" />
+    <Compile Include="Extensions\System.cs" />
     <Compile Include="Mapping\IObjectMapper.cs" />
     <Compile Include="Mapping\SystemMapper.cs" />
     <Compile Include="Net\Adapters\HttpClientAdapter.cs" />

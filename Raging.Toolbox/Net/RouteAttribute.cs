@@ -7,21 +7,29 @@ namespace Raging.Toolbox.Net
     {
         public RouteAttribute(string address)
         {
-            Guard.NullOrWhiteSpace(() => address, address);
+            Guard.NullOrWhiteSpace(() => address);
 
             this.Address = address;
         }
 
-        public RouteAttribute(string route, string name)
-            : this(route)
+        public RouteAttribute(string address, string name)
+            : this(address)
         {
-            Guard.NullOrWhiteSpace(() => name, name);
+            Guard.NullOrWhiteSpace(() => name);
 
             this.Name = name;
+        }
+
+        public RouteAttribute(string address, string name, string queryString)
+            : this(address, name)
+        {
+            this.QueryString = queryString;
         }
 
         public string Name { get; private set; }
 
         public string Address { get; private set; }
+
+        public string QueryString { get; private set; }
     }
 }

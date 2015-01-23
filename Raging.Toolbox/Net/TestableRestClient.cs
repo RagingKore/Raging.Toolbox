@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
@@ -15,7 +16,7 @@ namespace Raging.Toolbox.Net
     {
         public BetterJsonMediaTypeFormatter()
         {
-            SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
+            this.SupportedMediaTypes.Add(new MediaTypeHeaderValue("application/json"));
             this.Indent = true;
             this.UseDataContractJsonSerializer = false;
         }
@@ -37,12 +38,12 @@ namespace Raging.Toolbox.Net
 
         public TestableRestClient(IHttpClientAdapter client, string baseAddress, bool ensureSuccessStatusCode)
         {
-            this.client                  = client;
-            this.BaseAddress             = new Uri(baseAddress);
+            this.client = client;
+            this.BaseAddress = new Uri(baseAddress);
             this.EnsureSuccessStatusCode = ensureSuccessStatusCode;
         }
 
-        public Uri BaseAddress 
+        public Uri BaseAddress
         {
             get { return this.client.BaseAddress; }
             set { this.client.BaseAddress = value; }
@@ -60,8 +61,8 @@ namespace Raging.Toolbox.Net
         public Task<RestClientResponseMessage<TResponse>> Get<TRequest, TResponse>(TRequest request)
         {
             return this.Get<TRequest, TResponse, JsonMediaTypeFormatter>(
-                request, 
-                DefaultFormatter, 
+                request,
+                DefaultFormatter,
                 DefaultResponseValidator);
         }
 
@@ -97,19 +98,37 @@ namespace Raging.Toolbox.Net
             Func<IHttpContentAdapter, TContentFormatter, Task<TResponse>> contentReader)
             where TContentFormatter : MediaTypeFormatter
         {
-            return this.SendRequest(
+            return this.SendRequestWithResponseContentReturn(
                 request,
                 contentFormatter,
                 contentFormatter,
                 responseValidator,
                 contentReader,
-                (httpClient, route, clientRequest, clientRequestFormatter) 
+                (httpClient, route, clientRequest, clientRequestFormatter)
                     => this.client.GetAsync(route, HttpCompletionOption.ResponseContentRead));
         }
 
         #endregion
 
         #region . Post .
+        public Task<RestClientResponseMessage> Post<TRequest>(TRequest request)
+        {
+            return this.Post(request, DefaultFormatter);
+        }
+
+        public Task<RestClientResponseMessage> Post<TRequest, TRequestFormatter>(TRequest request, TRequestFormatter requestFormatter) where TRequestFormatter : MediaTypeFormatter
+        {
+            return this.Post(request, DefaultFormatter, DefaultResponseValidator);
+        }
+
+        public Task<RestClientResponseMessage> Post<TRequest, TRequestFormatter>(TRequest request, TRequestFormatter requestFormatter, Func<IHttpResponseMessageAdapter, bool> responseValidator) where TRequestFormatter : MediaTypeFormatter
+        {
+            return this.SendRequestWithoutResponseContentReturn(
+                request,
+                requestFormatter,
+                responseValidator,
+                (httpClient, route, clientRequest, clientRequestFormatter) => this.client.PostAsync(route, request, clientRequestFormatter));
+        }
 
         public Task<RestClientResponseMessage<TResponse>> Post<TRequest, TResponse>(TRequest request)
         {
@@ -160,7 +179,7 @@ namespace Raging.Toolbox.Net
             where TRequestFormatter : MediaTypeFormatter
             where TContentFormatter : MediaTypeFormatter
         {
-            return this.SendRequest(
+            return this.SendRequestWithResponseContentReturn(
                 request,
                 requestFormatter,
                 contentFormatter,
@@ -172,6 +191,24 @@ namespace Raging.Toolbox.Net
         #endregion
 
         #region . Put .
+        public Task<RestClientResponseMessage> Put<TRequest>(TRequest request)
+        {
+            return this.Put(request, DefaultFormatter);
+        }
+
+        public Task<RestClientResponseMessage> Put<TRequest, TRequestFormatter>(TRequest request, TRequestFormatter requestFormatter) where TRequestFormatter : MediaTypeFormatter
+        {
+            return this.Put(request, DefaultFormatter, DefaultResponseValidator);
+        }
+
+        public Task<RestClientResponseMessage> Put<TRequest, TRequestFormatter>(TRequest request, TRequestFormatter requestFormatter, Func<IHttpResponseMessageAdapter, bool> responseValidator) where TRequestFormatter : MediaTypeFormatter
+        {
+            return this.SendRequestWithoutResponseContentReturn(
+                request,
+                requestFormatter,
+                responseValidator,
+                (httpClient, route, clientRequest, clientRequestFormatter) => this.client.PutAsync(route, request, clientRequestFormatter));
+        }
 
         public Task<RestClientResponseMessage<TResponse>> Put<TRequest, TResponse>(TRequest request)
         {
@@ -222,7 +259,7 @@ namespace Raging.Toolbox.Net
             where TRequestFormatter : MediaTypeFormatter
             where TContentFormatter : MediaTypeFormatter
         {
-            return this.SendRequest(
+            return this.SendRequestWithResponseContentReturn(
                 request,
                 requestFormatter,
                 contentFormatter,
@@ -274,7 +311,7 @@ namespace Raging.Toolbox.Net
             Func<IHttpContentAdapter, TContentFormatter, Task<TResponse>> contentReader)
             where TContentFormatter : MediaTypeFormatter
         {
-            return this.SendRequest(
+            return this.SendRequestWithResponseContentReturn(
                 request,
                 contentFormatter,
                 contentFormatter,
@@ -285,7 +322,49 @@ namespace Raging.Toolbox.Net
 
         #endregion
 
-        public async Task<RestClientResponseMessage<TResponse>> SendRequest<TRequest, TResponse, TRequestFormatter, TContentFormatter>(
+        private static Task<TResponse> DefaultContentReader<TResponse, TFormatter>(IHttpContentAdapter responseContent, TFormatter formatter)
+          where TFormatter : MediaTypeFormatter
+        {
+            return responseContent.ReadAsAsync<TResponse>(new[] { formatter });
+        }
+
+        private async Task<RestClientResponseMessage> SendRequestWithoutResponseContentReturn<TRequest, TRequestFormatter>(
+            TRequest request,
+            TRequestFormatter requestFormatter,
+            Func<IHttpResponseMessageAdapter, bool> responseValidator,
+            Func<IHttpClientAdapter, string, TRequest, TRequestFormatter, Task<IHttpResponseMessageAdapter>> requestSender)
+            where TRequestFormatter : MediaTypeFormatter
+        {
+            Guard.Null(() => request, request);
+            Guard.Null(() => requestFormatter, requestFormatter);
+            Guard.Null(() => responseValidator, responseValidator);
+            Guard.Null(() => requestSender, requestSender);
+
+            // send request
+            var responseMessage = await this.SendRequest(request, requestFormatter, requestSender);
+
+            // validate response
+            var responseIsValid = responseValidator(responseMessage);
+
+            // read body content and deserialize it
+            if (responseIsValid)
+                return new RestClientResponseMessage(responseMessage.StatusCode);
+
+            // throw exception if configured
+            if (this.EnsureSuccessStatusCode)
+            {
+                throw new HttpRequestException(
+                    ErrorMessage.FormatWith(
+                        (int)responseMessage.StatusCode,
+                        responseMessage.StatusCode,
+                        Environment.NewLine + await responseMessage.Content.ReadAsStringAsync()));
+            }
+
+            // return a request result with the raw info
+            return new RestClientResponseMessage(responseMessage.StatusCode, await responseMessage.Content.ReadAsStringAsync());
+        }
+
+        private async Task<RestClientResponseMessage<TResponse>> SendRequestWithResponseContentReturn<TRequest, TResponse, TRequestFormatter, TContentFormatter>(
             TRequest request,
             TRequestFormatter requestFormatter,
             TContentFormatter contentFormatter,
@@ -302,75 +381,107 @@ namespace Raging.Toolbox.Net
             Guard.Null(() => contentReader, contentReader);
             Guard.Null(() => requestSender, requestSender);
 
-            // get route from request object
-            var route = typeof(TRequest)
-                .GetAttributeValue<RouteAttribute, string>(attribute => attribute.Address);
-
-            if(route.IsNullOrWhiteSpace())
-                throw new Exception("Route not defined.");
-            
-            // generate route
-            if(route.Contains("{"))
-            {
-                foreach(var property in typeof(TRequest)
-                    .GetProperties()
-                    .Where(info => info.CanRead))
-                {
-                    var key = "{" + property.Name + "}";
-
-                    if(route.Contains(key))
-                    {
-                        var value = property
-                            .GetValue(request, new object[] { });
-
-                        string textValue;
-
-                        if (typeof(ICollection<object>).IsAssignableFrom(property.PropertyType) && key.IsAfter("?", route))
-                        {
-                            textValue = ((ICollection<object>)value).Join();
-                        }
-                        else
-                        {
-                            textValue = value.ToString();
-                        }
-
-                        route = route.Replace(key, textValue);    
-                    }
-                }
-            }
-
             // send request
-            var responseMessage = await requestSender(this.client, route, request, requestFormatter);
+            var responseMessage = await this.SendRequest(request, requestFormatter, requestSender);
 
             // validate response
             var responseIsValid = responseValidator(responseMessage);
 
             // read body content and deserialize it
-            if(responseIsValid)
+            if (responseIsValid)
                 return new RestClientResponseMessage<TResponse>(
-                    responseMessage.StatusCode, 
+                    responseMessage.StatusCode,
                     await contentReader(responseMessage.Content, contentFormatter));
 
             // throw exception if configured
-            if(this.EnsureSuccessStatusCode)
+            if (this.EnsureSuccessStatusCode)
             {
                 throw new HttpRequestException(
                     ErrorMessage.FormatWith(
-                        (int)responseMessage.StatusCode, 
+                        (int)responseMessage.StatusCode,
                         responseMessage.StatusCode,
                         Environment.NewLine + await responseMessage.Content.ReadAsStringAsync()));
             }
 
             // return a request result with the raw info
             return new RestClientResponseMessage<TResponse>(
-                responseMessage.StatusCode, 
+                responseMessage.StatusCode,
                 await responseMessage.Content.ReadAsStringAsync());
         }
 
-        private static Task<TResponse> DefaultContentReader<TResponse, TFormatter>(IHttpContentAdapter responseContent, TFormatter formatter)
-          where TFormatter : MediaTypeFormatter
+        private async Task<IHttpResponseMessageAdapter> SendRequest<TRequest, TRequestFormatter>(
+            TRequest request,
+            TRequestFormatter requestFormatter,
+            Func<IHttpClientAdapter, string, TRequest, TRequestFormatter, Task<IHttpResponseMessageAdapter>> requestSender)
+            where TRequestFormatter : MediaTypeFormatter
         {
-            return responseContent.ReadAsAsync<TResponse>(new[] { formatter });
+            Guard.Null(() => request, request);
+            Guard.Null(() => requestFormatter, requestFormatter);
+            Guard.Null(() => requestSender, requestSender);
+
+            // get route from request object
+            var route = typeof(TRequest)
+                .GetAttributeValue<RouteAttribute, string>(attribute => attribute.Address);
+
+            var queryString = typeof(TRequest)
+                .GetAttributeValue<RouteAttribute, string>(attribute => attribute.QueryString)
+                ?? string.Empty;
+
+            if (route.IsNullOrWhiteSpace())
+                throw new Exception("Route not defined.");
+
+            // generate route
+            if (route.Contains("{") || queryString.Contains("{"))
+            {
+                foreach (var property in typeof(TRequest)
+                    .GetProperties()
+                    .Where(info => info.CanRead))
+                {
+                    var key = "{" + property.Name + "}";
+
+                    if (route.Contains(key))
+                    {
+                        var value = property.GetValue(request, new object[] { });
+
+                        var textValue = value.ToString();
+
+                        route = route.Replace(key, textValue);
+                    }
+                    else if (queryString.Contains(key))
+                    {
+                        var value = property.GetValue(request, new object[] { });
+
+                        string textValue;
+
+                        if (typeof(IEnumerable<object>).IsAssignableFrom(property.PropertyType))
+                        {
+                            // if the parameter is a generic collection where the generic type is a class, 
+                            // we can rely on covariance:
+                            textValue = ((IEnumerable<object>)value).Join();
+                        }
+                        else if (typeof(IEnumerable).IsAssignableFrom(property.PropertyType))
+                        {
+                            // if the parameter is a generic collection where the generic is a value type, 
+                            // or the parameter is a non-generic collection, we need to cast it:
+                            textValue = ((IEnumerable)value).Cast<object>().Join();
+                        }
+                        else
+                        {
+                            // but usually, we just rely that the parameter type overrides the object.ToString() method:
+                            textValue = value.ToString();
+                        }
+
+                        queryString = queryString.Replace(key, textValue);
+                    }
+                }
+            }
+
+            var address = queryString.IsNullOrWhiteSpace()
+                ? route
+                : string.Format("{0}?{1}", route, queryString);
+
+            // send request
+            return await requestSender(this.client, address, request, requestFormatter);
         }
     }
 }

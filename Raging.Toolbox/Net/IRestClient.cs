@@ -29,6 +29,19 @@ namespace Raging.Toolbox.Net
             Func<IHttpContentAdapter, TContentFormatter, Task<TResponse>> contentReader)
             where TContentFormatter : MediaTypeFormatter;
 
+        Task<RestClientResponseMessage> Post<TRequest>(TRequest request);
+
+        Task<RestClientResponseMessage> Post<TRequest, TRequestFormatter>(
+            TRequest request,
+            TRequestFormatter requestFormatter)
+            where TRequestFormatter : MediaTypeFormatter;
+
+        Task<RestClientResponseMessage> Post<TRequest, TRequestFormatter>(
+            TRequest request,
+            TRequestFormatter requestFormatter,
+            Func<IHttpResponseMessageAdapter, bool> responseValidator)
+            where TRequestFormatter : MediaTypeFormatter;
+
         Task<RestClientResponseMessage<TResponse>> Post<TRequest, TResponse>(TRequest request);
 
         Task<RestClientResponseMessage<TResponse>> Post<TRequest, TResponse, TRequestFormatter, TContentFormatter>(
@@ -54,6 +67,19 @@ namespace Raging.Toolbox.Net
             Func<IHttpContentAdapter, TContentFormatter, Task<TResponse>> contentReader)
             where TRequestFormatter : MediaTypeFormatter
             where TContentFormatter : MediaTypeFormatter;
+
+        Task<RestClientResponseMessage> Put<TRequest>(TRequest request);
+
+        Task<RestClientResponseMessage> Put<TRequest, TRequestFormatter>(
+            TRequest request,
+            TRequestFormatter requestFormatter)
+            where TRequestFormatter : MediaTypeFormatter;
+
+        Task<RestClientResponseMessage> Put<TRequest, TRequestFormatter>(
+            TRequest request,
+            TRequestFormatter requestFormatter,
+            Func<IHttpResponseMessageAdapter, bool> responseValidator)
+            where TRequestFormatter : MediaTypeFormatter;
 
         Task<RestClientResponseMessage<TResponse>> Put<TRequest, TResponse>(TRequest request);
 
@@ -99,16 +125,6 @@ namespace Raging.Toolbox.Net
             TContentFormatter contentFormatter,
             Func<IHttpResponseMessageAdapter, bool> responseValidator,
             Func<IHttpContentAdapter, TContentFormatter, Task<TResponse>> contentReader)
-            where TContentFormatter : MediaTypeFormatter;
-
-        Task<RestClientResponseMessage<TResponse>> SendRequest<TRequest, TResponse, TRequestFormatter, TContentFormatter>(
-            TRequest request,
-            TRequestFormatter requestFormatter,
-            TContentFormatter contentFormatter,
-            Func<IHttpResponseMessageAdapter, bool> responseValidator,
-            Func<IHttpContentAdapter, TContentFormatter, Task<TResponse>> contentReader,
-            Func<IHttpClientAdapter, string, TRequest, TRequestFormatter, Task<IHttpResponseMessageAdapter>> requestSender)
-            where TRequestFormatter : MediaTypeFormatter
             where TContentFormatter : MediaTypeFormatter;
     }
 }
